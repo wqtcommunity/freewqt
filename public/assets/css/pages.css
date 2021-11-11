@@ -296,3 +296,38 @@ body {
     border: 1px solid #DDD;
     border-top: 2px solid #FFF;
 }
+
+@media (max-width: 768px) {
+    #intro h1{
+    		font-size: 4.0rem;
+    }
+	
+    #intro h2{
+    		font-size: 1.2rem;
+    }
+	
+	#countdown {
+		max-width: 300px !important;
+	}
+
+	#countdown #time {
+		font-size: 0.7rem !important;
+	}
+
+	#countdown #time span {
+		font-size: 1.9rem !important;
+	}
+
+	#countdown #join_now {
+		display: none;
+	}
+
+    .navbar-nav .nav-signup{
+        margin: 0.5rem 0;
+    }
+
+    .navbar-nav .nav-signup a, .navbar-nav .nav-login a {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+}

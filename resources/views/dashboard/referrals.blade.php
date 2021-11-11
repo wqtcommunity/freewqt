@@ -34,7 +34,10 @@
             <h6 class="mt-4">Total Referrals</h6>
             <table class="table table-bordered table-striped table-secondary">
                 <tr>
-                    <th class="text-center">{{ auth()->user()->total_referrals }}</th>
+                    <th class="text-center">For All Rounds</th>
+                </tr>
+                <tr>
+                    <td class="text-center">{{ auth()->user()->total_referrals }}</td>
                 </tr>
             </table>
         </div>

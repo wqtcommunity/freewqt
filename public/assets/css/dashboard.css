@@ -180,3 +180,28 @@ main {
 #countdown #time span:first-of-type {
   margin-left: 0;
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    top: 0 !important;
+  }
+
+  #countdown #time {
+    font-size: 0.7rem !important;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  #countdown #time span {
+    font-size: 1.9rem !important;
+  }
+
+  #dataTable_length {
+    text-align: left !important;
+    margin-bottom: 0.5rem;
+  }
+
+  #dataTable_filter {
+    text-align: left !important;
+  }
+}

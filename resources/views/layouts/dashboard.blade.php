@@ -14,12 +14,14 @@
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/responsive.dataTables.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('assets/css/dashboard.css') }}@if(app()->environment() === 'local')?v={{ date('YmdHis') }}@endif" rel="stylesheet">
 
     <!-- jQuery -->
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.responsive.min.js') }}"></script>
 
     @yield('head')
 </head>

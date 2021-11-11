@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="alert alert-info">IMPORTANT: After each AirDrop ends, please wait 24 hours for the results to be calculated.</div>
-    <table class="table table-striped table-bordered">
+    <table class="table table-responsive table-striped table-bordered">
         <thead>
             <tr>
                 <th>Round</th>

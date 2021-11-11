@@ -1,7 +1,7 @@
 @extends('layouts.dashboard', ['page_title' => 'tickets'])
 
 @section('content')
-    <table id="dataTable" class="table table-bordered table-striped">
+    <table id="dataTable" class="table table-bordered table-responsive table-striped">
         <thead>
         <tr>
             <th>#</th>
@@ -22,7 +22,7 @@
                 <td class="text-center">{{ $round->won ?? '-' }}@if($round->won)<br><small>{{ $round->won_amount ?? '-' }}</small>@endif</td>
                 <td class="text-center">
                     {{ $round->created_at->format('Y-m-d') }}
-                    <small class="d-block">{{ $round->created_at->format('H:i A') }}</small>
+                    <small class="d-md-block">{{ $round->created_at->format('H:i A') }}</small>
                 </td>
             </tr>
         @endforeach
