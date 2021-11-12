@@ -61,6 +61,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'export_tickets') active @endif" href="{{ route('admin.dashboard.export_tickets') }}">
+                            <span data-feather="external-link"></span>
+                            Export Tickets
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(($page_title ?? '') === 'submit_winners') active @endif" href="{{ route('admin.dashboard.submit_winners') }}">
                             <span data-feather="star"></span>
                             Submit Winners

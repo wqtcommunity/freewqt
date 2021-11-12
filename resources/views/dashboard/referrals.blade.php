@@ -32,7 +32,7 @@
         </div>
         <div class="col-12 col-lg-4">
             <h6 class="mt-4">Total Referrals</h6>
-            <table class="table table-bordered table-striped table-secondary">
+            <table class="table table-bordered table-striped">
                 <tr>
                     <th class="text-center">For All Rounds</th>
                 </tr>

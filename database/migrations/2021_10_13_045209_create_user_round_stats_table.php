@@ -19,7 +19,7 @@ class CreateUserRoundStatsTable extends Migration
             $table->unsignedBigInteger('tickets')->default(0);
             $table->unsignedBigInteger('referrals')->default(0);
             $table->boolean('won')->nullable();
-            $table->decimal('won_amount', 8,2)->nullable();
+            $table->decimal('won_amount', 8,2)->default(0);
             $table->string('details')->nullable();
             $table->timestamps();
 

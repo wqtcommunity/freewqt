@@ -34,6 +34,31 @@ class AdminController extends Controller
         return view('admin.index', compact('total_users', 'round'));
     }
 
+    public function export_tickets()
+    {
+        $rounds = Round::select('id')->orderBy('id','desc')->limit(20)->get();
+
+        return view('admin.export_tickets', compact('rounds'));
+    }
+
+    public function export_tickets_generate()
+    {
+        request()->validate([
+            'round_id' => ['required','integer','exists:rounds,id'],
+            'only_address_ticket' => ['nullable', 'in:1']
+        ]);
+
+        $round_id = (int) request('round_id');
+
+        if(request('only_address_ticket')){
+            $tickets = UserRoundTicket::join('users', 'user_round_tickets.user_id', '=', 'users.id')->select(['user_round_tickets.round_id','user_round_tickets.ticket','users.wallet_address'])->where('user_round_tickets.round_id', $round_id)->get();
+        }else{
+            $tickets = UserRoundTicket::where('round_id', $round_id)->with('user')->get();
+        }
+
+        return $tickets;
+    }
+
     public function pending_tasks()
     {
         $pending_tasks = UserTask::with(['task','user'])->where('approved', false)->orderBy('id','DESC')->limit(500)->get();

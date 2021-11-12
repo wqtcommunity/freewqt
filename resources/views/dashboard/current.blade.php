@@ -5,7 +5,7 @@
         <div class="alert alert-info">It appears that the countdown timer has reached 0!<br><br><strong>Please wait 24 hours</strong> for the results to be calculated, we will find the winning tickets according to AirDrop description and send the rewards to winners' wallet addresses within the next 48 hours.</div>
     @endif
     <section id="countdown">
-        <span class="next">Block will be mined in approximately:</span>
+        <span class="d-block next">Block will be mined in approximately:</span>
         <div id="time" class="mt-1"></div>
         <br>
         <span class="next">Rewards <small class="text-secondary">(Amount will be split between all winners)</small></span>

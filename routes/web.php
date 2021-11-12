@@ -60,6 +60,9 @@ Route::post("/admin/{$admin_prefix}/logout", [AdminAuthController::class, 'logou
 // Admin Dashboard
 Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->middleware(['auth:admin'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
+    // Export Tickets
+    Route::get('/export_tickets', [AdminController::class, 'export_tickets'])->name('export_tickets');
+    Route::post('/export_tickets/generate', [AdminController::class, 'export_tickets_generate'])->name('export_tickets.generate');
     // Review Pending Tasks
     Route::get('/pending_tasks', [AdminController::class, 'pending_tasks'])->name('pending_tasks');
     Route::post('/pending_tasks/{user_task_id}/{action}', [AdminController::class, 'pending_tasks_action'])->name('pending_tasks.action');

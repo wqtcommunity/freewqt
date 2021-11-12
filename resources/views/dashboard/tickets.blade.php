@@ -19,7 +19,7 @@
                 <td>{{ $round->round_id }}</td>
                 <td class="text-center">{{ $round->ticket }}</td>
                 <td class="text-center">{{ ucwords($round->type) }}</td>
-                <td class="text-center">{{ $round->won ?? '-' }}@if($round->won)<br><small>{{ $round->won_amount ?? '-' }}</small>@endif</td>
+                <td class="text-center">@if($round->won)<strong class="text-success">Yes!</strong> <small class="text-success">({{ $round->won_amount ?? '-' }})</small>@else - @endif</td>
                 <td class="text-center">
                     {{ $round->created_at->format('Y-m-d') }}
                     <small class="d-md-block">{{ $round->created_at->format('H:i A') }}</small>

@@ -1,7 +1,7 @@
 @extends('layouts.pages', ['pg' => 'pages'])
 
 @section('content')
-    <main class="form-auth text-center py-5">
+    <main class="form-auth text-center pt-5">
         <form action="{{ route('login.check') }}" method="POST">
             @csrf
             <a href="/"><img class="mb-5 mt-2" id="auth_logo" src="{{ asset('assets/img/logo.png') }}" alt="FreeWQT"></a>
@@ -28,4 +28,6 @@
             <p class="mt-5 mb-3 text-muted">Don't have an account? <a href="{{ route('signup') }}">Create one here</a></p>
         </form>
     </main>
+
+    <p class="text-center mb-5 alert alert-info"><small>Because you only sign up with your Address and Password, resetting or recovering your password is not possible,<br>but if you win your WQT will be sent to your address automatically, you do not need to manually withdraw!</small></p>
 @endsection

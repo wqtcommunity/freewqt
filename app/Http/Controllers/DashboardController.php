@@ -89,7 +89,7 @@ class DashboardController extends Controller
 
     public function tickets()
     {
-        $round_tickets = UserRoundTicket::select(['round_id','ticket','type','won','created_at'])->where('user_id', auth()->user()->id)->orderBy('round_id', 'DESC')->paginate(200);
+        $round_tickets = UserRoundTicket::select(['round_id','ticket','type','won','won_amount','created_at'])->where('user_id', auth()->user()->id)->orderBy('round_id', 'DESC')->paginate(200);
 
         return view('dashboard.tickets', compact('round_tickets'));
     }

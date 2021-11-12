@@ -17,7 +17,7 @@
                 <td>{{ $round_stats->round_id }}</td>
                 <td>{{ $round_stats->tickets }}</td>
                 <td>{{ $round_stats->referrals }}</td>
-                <td>@if($round_stats->won)YES!<br><small>{{ $round_stats->won_amount ?? '-' }}</small>@else - @endif</td>
+                <td>@if($round_stats->won)<strong class="text-success">Yes!</strong> <small class="text-success">({{ $round_stats->won_amount ?? '-' }})</small>@else - @endif</td>
             </tr>
         @endforeach
         </tbody>
