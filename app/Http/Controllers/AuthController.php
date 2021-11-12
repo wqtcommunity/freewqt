@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -38,8 +38,9 @@ class AuthController extends Controller
         $page_id = 'signup';
 
         $validation_rules = [
-            'wallet_address' => ['required','string','alpha_num','size:42',new ethereumValidator, 'unique:App\Models\User,wallet_address'],
-            'password'       => 'required|string|confirmed|min:8',
+            'wallet_address' => ['required','string','alpha_num','size:42','unique:users', new ethereumValidator],
+            'password'       => ['required','string','confirmed','min:8'],
+            'email'          => ['nullable','email']
         ];
 
         if(config('custom.recaptcha.enabled') && in_array($page_id, config('custom.recaptcha.enable_pages'))){
@@ -76,16 +77,23 @@ class AuthController extends Controller
                     'wallet_address' => $request->wallet_address,
                     'password' => Hash::make($request->password),
                     'referrer_id' => $referrer_id,
-                    'uuid' => Str::orderedUuid()
+                    'uuid' => Str::orderedUuid(),
+                    'email' => request('email', null)
                 ]);
 
                 // Generate Ticket and Update Stats for Referral Bonus
-                if( ! is_null($referrer_id)){
+                // unless No Ticket is set for referrer
+                if( ! is_null($referrer_id) && session('ref_skip_ticket', false) !== true){
                     $this->generate_ticket($referrer_id, 'referral', $user->id, false);
+                }elseif( ! is_null($referrer_id) && session('ref_skip_ticket', false) === true){
+                    // update "No Ref Ticket" Referrer's stats
+                    User::where('id', $referrer_id)->update([
+                        'total_referrals' => DB::raw('total_referrals + 1'),
+                    ]);
                 }
 
                 // Forget Referrer
-                session()->forget(['referrer_uuid']);
+                session()->forget(['referrer_uuid','ref_skip_ticket']);
 
                 // Login
                 Auth::login($user);

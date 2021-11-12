@@ -49,6 +49,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'users') active @endif" aria-current="page" href="{{ route('admin.dashboard.users') }}">
+                            <span data-feather="user"></span>
+                            Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(($page_title ?? '') === 'pending_tasks') active @endif" href="{{ route('admin.dashboard.pending_tasks') }}">
                             <span data-feather="briefcase"></span>
                             Pending Tasks
@@ -70,6 +76,12 @@
                         <a class="nav-link @if(($page_title ?? '') === 'submit_winners') active @endif" href="{{ route('admin.dashboard.submit_winners') }}">
                             <span data-feather="star"></span>
                             Submit Winners
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'change_password') active @endif" href="{{ route('admin.dashboard.change_password') }}">
+                            <span data-feather="key"></span>
+                            Change Password
                         </a>
                     </li>
                     <li class="nav-item">

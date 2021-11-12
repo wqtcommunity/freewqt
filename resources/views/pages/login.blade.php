@@ -29,5 +29,7 @@
         </form>
     </main>
 
-    <p class="text-center mb-5 alert alert-info"><small>Because you only sign up with your Address and Password, resetting or recovering your password is not possible,<br>but if you win your WQT will be sent to your address automatically, you do not need to manually withdraw!</small></p>
+    @if( ! config('custom.optional_email'))
+        <p class="text-center mb-5 alert alert-info"><small>Because you only sign up with your Address and Password, resetting or recovering your password is not possible,<br>but if you win your WQT will be sent to your address automatically, you do not need to manually withdraw!</small></p>
+    @endif
 @endsection

@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->char('wallet_address', 42)->unique();
             $table->string('password');
+            $table->string('email')->nullable();
             $table->uuid('uuid')->index();
             $table->unsignedBigInteger('referrer_id')->nullable();
             $table->unsignedInteger('total_referrals')->default(0);

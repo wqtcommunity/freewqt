@@ -18,6 +18,10 @@ class PagesController extends Controller
             session(['referrer_uuid' => $referrer]);
         }
 
+        if(request('ref_type', false) === 'nt'){
+            session(['ref_skip_ticket' => true]);
+        }
+
         // Retrieve current round from Cache/DB
         $current_round = $this->current_round_data();
 

@@ -21,9 +21,6 @@
                 <li class="nav-item px-md-3">
                     <a class="nav-link @if($current_route === 'pages.provably_fair') active @endif" href="{{ route('pages.provably_fair') }}">Provably Fair</a>
                 </li>
-                <li class="nav-item px-md-3">
-                    <a class="nav-link @if($current_route === 'pages.winners') active @endif" href="{{ route('pages.winners') }}">Winners</a>
-                </li>
                 @auth
                     <li class="nav-item px-md-3">
                         <a href="{{ route('dashboard.index') }}" class="nav-link nav-dashboard">Dashboard</a>

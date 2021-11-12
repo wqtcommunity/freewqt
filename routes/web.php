@@ -60,6 +60,8 @@ Route::post("/admin/{$admin_prefix}/logout", [AdminAuthController::class, 'logou
 // Admin Dashboard
 Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->middleware(['auth:admin'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
+    // Users
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
     // Export Tickets
     Route::get('/export_tickets', [AdminController::class, 'export_tickets'])->name('export_tickets');
     Route::post('/export_tickets/generate', [AdminController::class, 'export_tickets_generate'])->name('export_tickets.generate');
@@ -74,4 +76,7 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     // Submit Winners
     Route::get('/submit_winners', [AdminController::class, 'submit_winners'])->name('submit_winners');
     Route::post('/submit_winners', [AdminController::class, 'submit_winners_store'])->name('submit_winners.store');
+    // Change Password
+    Route::get('/change_password', [AdminController::class, 'change_password'])->name('change_password');
+    Route::post('/change_password', [AdminController::class, 'change_password_store'])->name('change_password.store');
 });

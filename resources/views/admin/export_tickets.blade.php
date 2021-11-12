@@ -18,7 +18,7 @@
                     Export only wallet address and ticket
                 </label>
             </div>
-            <button class="mt-2 btn btn-primary">Export JSON</button>
+            <button type="submit" class="mt-2 btn btn-primary">Export JSON</button>
         </form>
     </div>
 @endsection

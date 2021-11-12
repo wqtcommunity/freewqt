@@ -11,6 +11,7 @@ use App\Models\UserTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\TicketTrait;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +33,13 @@ class AdminController extends Controller
         $round['block'] = $last_round?->block_numer;
 
         return view('admin.index', compact('total_users', 'round'));
+    }
+
+    public function users()
+    {
+        $users = User::orderBy('id','DESC')->paginate(100);
+
+        return view('admin.users', compact('users'));
     }
 
     public function export_tickets()
@@ -150,5 +158,26 @@ class AdminController extends Controller
 
         flash('Successfully updated winners!')->success();
         return redirect()->route('admin.dashboard.submit_winners');
+    }
+
+    public function change_password()
+    {
+        return view('admin.change_password');
+    }
+
+    public function change_password_store()
+    {
+        request()->validate([
+            'current_password' => ['required','current_password:admin'],
+            'password'         => ['required','confirmed','min:8'],
+        ]);
+
+        $admin_id = (int) auth('admin')->user()->id;
+        Admin::where('id', $admin_id)->update([
+            'password' => Hash::make(request('password'))
+        ]);
+
+        flash('Password changed!')->success();
+        return redirect()->route('admin.dashboard.change_password');
     }
 }

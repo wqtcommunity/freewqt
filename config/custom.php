@@ -13,6 +13,9 @@ return [
 
     'salt' => env('CUSTOM_SALT', 'bgv8PGNcTSUCs62RX'),
 
+    // Do we ask users to optionally enter their e-mail address while signing up?
+    'optional_email' => true,
+
     'admin_route_prefix' => env('ADMIN_ROUTE_PREFIX', 'none'),
 
     // WARNING: Changing the following settings requires a change in database tables too

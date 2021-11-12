@@ -31,7 +31,7 @@
             </div>
             <div class="question">
                 <strong>Is this safe?</strong>
-                <p>Yes! we will NEVER ask you to connect your wallet, or even enter your e-mail address! If you are still hesitant, you can simply join by entering a new BSC wallet address with no funds in it.</p>
+                <p>Yes! we will NEVER ask you to connect your wallet, and even entering your e-mail address is optional! If you are still hesitant, you can simply join by entering a new BSC wallet address with no funds in it.</p>
             </div>
             <div class="question">
                 <strong>How will I receive my WorkQuest tokens if I win?</strong>
