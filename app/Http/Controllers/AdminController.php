@@ -83,9 +83,13 @@ class AdminController extends Controller
         $round_id = $user_task->task->round_id;
         $task_id = $user_task->task->id;
 
+        $reward_tickets = $user_task->task->tickets;
+
         if($action === 'approve'){
             flash('Task Approved!')->success();
-            $ticket = $this->generate_ticket($user_id, 'task', $task_id, true, $round_id,false);
+            for($i=1; $i<=$reward_tickets; $i++){
+                $ticket = $this->generate_ticket($user_id, 'task', $task_id, true, $round_id,false);
+            }
         }else{
             flash('Task Rejected!')->warning();
             $user_task->delete();

@@ -17,7 +17,7 @@
             <label for="difficulty" class="form-label">Difficulty</label>
             <select required class="form-select" name="difficulty" id="difficulty">
                 <option></option>
-                <option @if(old('difficulty') === 'instant') selected @endif value="instant">Instant (Approved as soon as they submit)</option>
+                <option @if(old('difficulty') === 'instant') selected @endif value="instant">Instant (Approved as soon as they submit, reward can only be 1 ticket)</option>
                 <option @if(old('difficulty') === 'easy') selected @endif value="easy">Easy</option>
                 <option @if(old('difficulty') === 'normal') selected @endif value="normal">Normal</option>
                 <option @if(old('difficulty') === 'hard') selected @endif value="hard">Hard</option>

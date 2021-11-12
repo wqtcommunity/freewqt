@@ -24,17 +24,17 @@ class DatabaseSeeder extends Seeder
         Task::insert([
             [
                 'round_id'       => 1,
-                'title'          => "Get your first ticket instantly",
-                'description'    => "Everyone can have a chance in the next airdrop, your first ticket does not require doing any tasks! simply click the button below.",
+                'title'          => "Add WorkQuest to your CoinMarketCap watchlist",
+                'description'    => "We will not be able to verify this task, but we would appreciate if you add WorkQuest to your Watchlist on CoinMarketCap. simply click Get Ticket button below to get your ticket.",
                 'difficulty'      => 'instant',
-                'link'           => null,
+                'link'           => "https://coinmarketcap.com/currencies/workquest/",
                 'tickets'        => 1,
                 'input_required' => false,
                 'input_title'    => false
             ],[
                 'round_id'       => 1,
                 'title'          => "Join WorkQuest's Official Telegram Group",
-                'description'    => "Please click the link below and join WorkQuest's Official Telegram Group. Then enter your username and submit the form.",
+                'description'    => "Please join WorkQuest's Telegram Group.",
                 'difficulty'      => 'easy',
                 'link'           => 'https://t.me/WorkQuestChat',
                 'tickets'        => 1,
@@ -42,28 +42,64 @@ class DatabaseSeeder extends Seeder
                 'input_title'    => 'Your Telegram Username'
             ],[
                 'round_id'       => 1,
-                'title'          => "Retweet",
-                'description'    => "Retweet the Pinned Tweet on WorkQuest's Twitter account while tagging 3 of your friends and paste the link of your retweet below.",
-                'difficulty'      => 'normal',
-                'link'           => 'https://twitter.com/workquest_co',
-                'tickets'        => 2,
+                'title'          => "Join WorkQuest's official Telegram channel",
+                'description'    => "Please join WorkQuest's Telegram Channel.",
+                'difficulty'      => 'instant',
+                'link'           => 'https://t.me/WorkQuest',
+                'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Retweet Link'
+                'input_title'    => 'Your Telegram Username'
+            ],[
+                'round_id'       => 1,
+                'title'          => "Join WorkQuest's Discord server",
+                'description'    => "Please join WorkQuest's Discord Channel.",
+                'difficulty'      => 'instant',
+                'link'           => 'https://discord.com/invite/U8k234ArHP',
+                'tickets'        => 1,
+                'input_required' => true,
+                'input_title'    => 'Your Discord Username'
             ],[
                 'round_id'       => 1,
                 'title'          => "Follow WorkQuest on Twitter",
                 'description'    => "Please click the link below and Follow WorkQuest on Twitter. Then enter your username and submit the form.",
-                'difficulty'      => 'easy',
+                'difficulty'      => 'instant',
                 'link'           => 'https://twitter.com/workquest_co',
                 'tickets'        => 1,
                 'input_required' => true,
                 'input_title'    => 'Your Twitter Username'
             ],[
                 'round_id'       => 1,
-                'title'          => "Add WorkQuest to your Watchlist on CoinMarketCap",
-                'description'    => "We will not be able to verify this task, but we would appreciate if you add WorkQuest to your Watchlist on CoinMarketCap. simply click Get Ticket button below to get your ticket.",
+                'title'          => "Retweet, Like and Comment on the pinned tweet",
+                'description'    => "Like, comment and Retweet the pinned tweet on WorkQuest's official twitter page",
+                'difficulty'      => 'normal',
+                'link'           => 'https://twitter.com/workquest_co',
+                'tickets'        => 3,
+                'input_required' => true,
+                'input_title'    => 'Retweet Link'
+            ],[
+                'round_id'       => 1,
+                'title'          => "Subscribe to WorkQuest's official YouTube channel",
+                'description'    => "Please Subscribe to WorkQuest's official YouTube channel",
                 'difficulty'      => 'instant',
-                'link'           => 'https://coinmarketcap.com/currencies/workquest/',
+                'link'           => 'https://www.youtube.com/channel/UCpQTdOMynXejrRTVf4ksKPA/videos',
+                'tickets'        => 1,
+                'input_required' => false,
+                'input_title'    => null
+            ],[
+                'round_id'       => 1,
+                'title'          => "Follow WorkQuest's official Medium Page",
+                'description'    => "Please follow WorkQuest's official Medium page",
+                'difficulty'      => 'instant',
+                'link'           => 'https://workquest.medium.com/',
+                'tickets'        => 1,
+                'input_required' => false,
+                'input_title'    => null
+            ],[
+                'round_id'       => 1,
+                'title'          => "Join WorkQuest's official Reddit Page",
+                'description'    => "Please join WorkQuest's official Reddit Page",
+                'difficulty'      => 'instant',
+                'link'           => 'https://www.reddit.com/user/WorkQuest_co',
                 'tickets'        => 1,
                 'input_required' => false,
                 'input_title'    => null
