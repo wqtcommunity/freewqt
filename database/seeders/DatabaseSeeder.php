@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://t.me/WorkQuestChat',
                 'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Your Telegram Username'
+                'input_title'    => 'Your Telegram Username (@username)'
             ],[
                 'round_id'       => 1,
                 'title'          => "Join WorkQuest's official Telegram channel",
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://t.me/WorkQuest',
                 'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Your Telegram Username'
+                'input_title'    => 'Your Telegram Username (@username)'
             ],[
                 'round_id'       => 1,
                 'title'          => "Join WorkQuest's Discord server",
@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://discord.com/invite/U8k234ArHP',
                 'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Your Discord Username'
+                'input_title'    => 'Your Discord Username (username#0000)'
             ],[
                 'round_id'       => 1,
                 'title'          => "Follow WorkQuest on Twitter",
@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://twitter.com/workquest_co',
                 'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Your Twitter Username'
+                'input_title'    => 'Your Twitter Username (@username)'
             ],[
                 'round_id'       => 1,
                 'title'          => "Retweet, Like and Comment on the pinned tweet",

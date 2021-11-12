@@ -6,7 +6,14 @@ The usual Laravel project installation:
 1. Clone the code: `git clone https://github.com/wqtcommunity/freewqt/`
 2. Rename freewqt directory name to your liking
 3. `cd` to installation directory and run: `composer install --no-dev`
-4. Make sure file/directory permissions are correct
+4. Make sure file/directory permissions are correct, run these commands in the root app directory as well:
+> sudo chown -R $USER:www-data storage
+> 
+> sudo chown -R $USER:www-data bootstrap/cache
+> 
+> chmod -R 775 storage
+> 
+> chmod -R 775 bootstrap/cache
 5. Point your webserver to /public directory when domain is accessed
 6. In your application root directory, create the .env file: `cp env_example .env`
 7. Run command `php artisan key:generate`
