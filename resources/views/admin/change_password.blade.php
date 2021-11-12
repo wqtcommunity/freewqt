@@ -1,4 +1,4 @@
-@extends('layouts.admin_dashboard', ['page_title' => 'export_tickets'])
+@extends('layouts.admin_dashboard', ['page_title' => 'change_password'])
 
 @section('content')
     <div class="row">

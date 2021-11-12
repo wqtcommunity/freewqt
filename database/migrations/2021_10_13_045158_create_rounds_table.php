@@ -33,7 +33,7 @@ class CreateRoundsTable extends Migration
             [
                 'block_number' => 0,
                 'active'       => true,
-                'rewards'      => 10000,
+                'rewards'      => 15000,
                 'estimated_block_time' => time() + 606000
             ]
         );
