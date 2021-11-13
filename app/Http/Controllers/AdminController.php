@@ -107,7 +107,7 @@ class AdminController extends Controller
                 if($ticket !== false){
                     flash('Task Approved!')->success();
                 }else{
-                    $ticket = $this->generate_ticket($user_id, 'task', $task_id, $round_id);
+                    $ticket = $this->generate_ticket($user_id, 'task', $task_id, $round_id,false, 3);
                     if($ticket !== false)
                     {
                         flash('Task Approved!')->success();
@@ -137,12 +137,6 @@ class AdminController extends Controller
         if( ! in_array($batch_approval_type, ['by_single_user','by_task_id','secondary_all'])){
             abort(403);
         }
-
-        $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
-        if( ! $last_round){
-            abort(403);
-        }
-        $last_round_id = $last_round->id;
 
         // By User ID
         if($batch_approval_type === 'by_single_user' && request('user_id')){

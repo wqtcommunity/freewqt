@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 trait TicketTrait {
-    public function generate_ticket(int $user_id, string $type='task', int $related_id=null, int $round_id=null, bool $instant_task=false)
+    public function generate_ticket(int $user_id, string $type='task', int $related_id=null, int $round_id=null, bool $instant_task=false, int $increment_by = 1)
     {
         // Round ID
         if( ! isset($round_id)){
@@ -39,17 +39,14 @@ trait TicketTrait {
         // Insert Ticket
         try
         {
-            $d_counter = 0;
-            $ticket = DB::transaction(function () use($user_id, $type, $related_id, $round_id, $instant_task, $d_counter)
+            $ticket = DB::transaction(function () use($user_id, $type, $related_id, $round_id, $instant_task, $increment_by)
             {
-                $d_counter++;
-
-                if(random_int(10, 99) >= 50){
+                if(random_int(0, 1)){
                     $order_by = 'desc';
-                    $add = $d_counter;
+                    $add = $increment_by;
                 }else{
                     $order_by = 'asc';
-                    $add = -$d_counter;
+                    $add = -$increment_by;
                 }
 
                 $get_last_ticket_number = UserRoundTicket::where('round_id', $round_id)->orderBy('ticket', $order_by)->first();
