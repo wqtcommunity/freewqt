@@ -105,12 +105,12 @@ class AdminController extends Controller
             for($i=1; $i<=$reward_tickets; $i++){
                 $ticket = $this->generate_ticket($user_id, 'task', $task_id, $round_id);
                 if($ticket !== false){
-                    flash('Task Approved!')->success();
+                    flash('Ticket Generated!')->success();
                 }else{
                     $ticket = $this->generate_ticket($user_id, 'task', $task_id, $round_id,false, 3);
                     if($ticket !== false)
                     {
-                        flash('Task Approved!')->success();
+                        flash('Ticket Generated on Second Try!')->success();
                     }else{
                         flash('Failed!')->error();
                     }
