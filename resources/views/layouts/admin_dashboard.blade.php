@@ -61,6 +61,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'batch_approval') active @endif" href="{{ route('admin.dashboard.batch_approval') }}">
+                            <span data-feather="grid"></span>
+                            Batch Approval
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(($page_title ?? '') === 'rounds') active @endif" href="{{ route('admin.dashboard.rounds.index') }}">
                             <span data-feather="book"></span>
                             Rounds

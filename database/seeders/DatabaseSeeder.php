@@ -30,7 +30,8 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://t.me/WorkQuestChat',
                 'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Your Telegram Username (@username)'
+                'input_title'    => 'Your Telegram Username (@username)',
+                'primary'        => true
             ],[
                 'round_id'       => 1,
                 'title'          => "Join WorkQuest's official Telegram channel",
@@ -39,25 +40,8 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://t.me/WorkQuest',
                 'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Your Telegram Username (@username)'
-            ],[
-                'round_id'       => 1,
-                'title'          => "Add WorkQuest to your CoinMarketCap watchlist",
-                'description'    => "Please add WorkQuest to your CoinMarketCap watchlist.",
-                'difficulty'      => 'easy',
-                'link'           => "https://coinmarketcap.com/currencies/workquest/",
-                'tickets'        => 1,
-                'input_required' => false,
-                'input_title'    => false
-            ],[
-                'round_id'       => 1,
-                'title'          => "Join WorkQuest's Discord server",
-                'description'    => "Please join WorkQuest's Discord Channel.",
-                'difficulty'      => 'easy',
-                'link'           => 'https://discord.com/invite/U8k234ArHP',
-                'tickets'        => 1,
-                'input_required' => true,
-                'input_title'    => 'Your Discord Username (username#0000)'
+                'input_title'    => 'Your Telegram Username (@username)',
+                'primary'        => true
             ],[
                 'round_id'       => 1,
                 'title'          => "Follow WorkQuest on Twitter",
@@ -66,7 +50,8 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://twitter.com/workquest_co',
                 'tickets'        => 1,
                 'input_required' => true,
-                'input_title'    => 'Your Twitter Username (@username)'
+                'input_title'    => 'Your Twitter Username (@username)',
+                'primary'        => true
             ],[
                 'round_id'       => 1,
                 'title'          => "Retweet, Like and Comment on the pinned tweet",
@@ -75,7 +60,28 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://twitter.com/workquest_co',
                 'tickets'        => 3,
                 'input_required' => true,
-                'input_title'    => 'Retweet Link'
+                'input_title'    => 'Retweet Link',
+                'primary'        => true
+            ],[
+                'round_id'       => 1,
+                'title'          => "Join WorkQuest's Discord server",
+                'description'    => "Please join WorkQuest's Discord Channel.",
+                'difficulty'      => 'easy',
+                'link'           => 'https://discord.com/invite/U8k234ArHP',
+                'tickets'        => 1,
+                'input_required' => true,
+                'input_title'    => 'Your Discord Username (username#0000)',
+                'primary'        => false
+            ],[
+                'round_id'       => 1,
+                'title'          => "Add WorkQuest to your CoinMarketCap watchlist",
+                'description'    => "Please add WorkQuest to your CoinMarketCap watchlist.",
+                'difficulty'      => 'easy',
+                'link'           => "https://coinmarketcap.com/currencies/workquest/",
+                'tickets'        => 1,
+                'input_required' => false,
+                'input_title'    => null,
+                'primary'        => false
             ],[
                 'round_id'       => 1,
                 'title'          => "Subscribe to WorkQuest's official YouTube channel",
@@ -84,7 +90,8 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://www.youtube.com/channel/UCpQTdOMynXejrRTVf4ksKPA/videos',
                 'tickets'        => 1,
                 'input_required' => false,
-                'input_title'    => null
+                'input_title'    => null,
+                'primary'        => false
             ],[
                 'round_id'       => 1,
                 'title'          => "Follow WorkQuest's official Medium Page",
@@ -93,7 +100,8 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://workquest.medium.com/',
                 'tickets'        => 1,
                 'input_required' => false,
-                'input_title'    => null
+                'input_title'    => null,
+                'primary'        => false
             ],[
                 'round_id'       => 1,
                 'title'          => "Join WorkQuest's official Reddit Page",
@@ -102,7 +110,8 @@ class DatabaseSeeder extends Seeder
                 'link'           => 'https://www.reddit.com/user/WorkQuest_co',
                 'tickets'        => 1,
                 'input_required' => false,
-                'input_title'    => null
+                'input_title'    => null,
+                'primary'        => false
             ],
         ]);
     }

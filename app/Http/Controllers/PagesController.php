@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Round;
-use Illuminate\Support\Str;
-use DB;
 use App\Http\Traits\RoundTrait;
 
 class PagesController extends Controller
@@ -13,12 +10,16 @@ class PagesController extends Controller
 
     public function index()
     {
+        // Set Actual referrer ID
         $referrer = request('referrer', false);
-        if($referrer && Str::of($referrer)->isUuid()){
-            session(['referrer_uuid' => $referrer]);
+        $referrer_id_increment_by = config('custom.referrer_id_increment_by');
+        if($referrer && ctype_digit($referrer) && $referrer > $referrer_id_increment_by)
+        {
+            $actual_referrer_id = intval(bcsub("$referrer", "$referrer_id_increment_by", 0));
+            session(['actual_referrer_id' => $actual_referrer_id]);
         }
 
-        if(request('ref_type', false) === 'nt'){
+        if(request('r_type', false) === 'nt'){
             session(['ref_skip_ticket' => true]);
         }
 
@@ -38,8 +39,12 @@ class PagesController extends Controller
         return view('pages.winners');
     }
 
-    public function provably_fair()
+    public function fair_draw()
     {
-        return view('pages.provably_fair');
+        $tickets['max'] = str_repeat('9', config('custom.tickets.length'));
+        $tickets['min'] = '1' . str_repeat('0', config('custom.tickets.length') - 1);
+        $tickets['mid'] = '5' . str_repeat('0', config('custom.tickets.length') - 1);
+
+        return view('pages.fair_draw', compact('tickets'));
     }
 }

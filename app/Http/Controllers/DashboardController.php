@@ -16,10 +16,12 @@ class DashboardController extends Controller
 
     public function index()
     {
+        $incremented_ref_id = auth()->user()->id + config('custom.referrer_id_increment_by');
+
         $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
         $user_stats = UserRoundStats::where('user_id', auth()->user()->id)->where('round_id', $last_round->id)->first();
 
-        return view('dashboard.index', compact('last_round','user_stats'));
+        return view('dashboard.index', compact('last_round','user_stats','incremented_ref_id'));
     }
 
     public function tasks()
@@ -29,7 +31,7 @@ class DashboardController extends Controller
         $tasks = Task::where('tasks.round_id', $last_round->id)->leftjoin('user_tasks', function ($join){
             $join->on('user_tasks.task_id', '=', 'tasks.id')
                 ->where('user_tasks.user_id','=', auth()->user()->id);
-        })->select('*','tasks.id as id')->get();
+        })->select('*','tasks.id as id')->orderBy('tasks.primary', 'desc')->get();
 
         return view('dashboard.tasks', compact('tasks'));
     }
@@ -53,7 +55,7 @@ class DashboardController extends Controller
         if($task->difficulty === 'instant')
         {
             // Generate Ticket
-            $generate_ticket = $this->generate_ticket($user_id, 'task', $task_id, true, $round_id, true);
+            $generate_ticket = $this->generate_ticket($user_id, 'task', $task_id, $round_id, true);
             if($generate_ticket){
                 flash("Ticket {$generate_ticket} generated for you.")->success();
                 return redirect()->route('dashboard.tasks');
@@ -109,8 +111,9 @@ class DashboardController extends Controller
 
     public function referrals()
     {
+        $incremented_ref_id = auth()->user()->id + config('custom.referrer_id_increment_by');
         $round_stats = UserRoundStats::select(['round_id', 'referrals'])->where('user_id', auth()->user()->id)->orderBy('round_id','DESC')->get();
 
-        return view('dashboard.referrals', compact('round_stats'));
+        return view('dashboard.referrals', compact('round_stats','incremented_ref_id'));
     }
 }

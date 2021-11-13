@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Round;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\UserRoundStats;
 use App\Models\UserRoundTicket;
@@ -69,9 +70,24 @@ class AdminController extends Controller
 
     public function pending_tasks()
     {
-        $pending_tasks = UserTask::with(['task','user'])->where('approved', false)->orderBy('id','DESC')->limit(500)->get();
+        $pending_tasks = UserTask::with(['task','user'])->where('approved', false);
 
-        return view('admin.pending_tasks', compact('pending_tasks'));
+        $filter_task = request('task_id', session('admin_pending_tasks_filter_task', false));
+
+        if($filter_task === 'none'){
+            session()->forget('admin_pending_tasks_filter_task');
+            $filter_task = false;
+        }elseif($filter_task && ctype_digit($filter_task)){
+            session(['admin_pending_tasks_filter_task' => $filter_task]);
+            $pending_tasks = $pending_tasks->where('task_id', $filter_task);
+        }
+
+        $limit = (int) request('limit', 500);
+
+        $pending_tasks = $pending_tasks->orderBy('id','DESC')->limit($limit)->get();
+        $tasks = Task::all();
+
+        return view('admin.pending_tasks', compact('pending_tasks','tasks','filter_task','limit'));
     }
 
     public function pending_tasks_action($user_task_id, $action)
@@ -86,9 +102,19 @@ class AdminController extends Controller
         $reward_tickets = $user_task->task->tickets;
 
         if($action === 'approve'){
-            flash('Task Approved!')->success();
             for($i=1; $i<=$reward_tickets; $i++){
-                $ticket = $this->generate_ticket($user_id, 'task', $task_id, true, $round_id,false);
+                $ticket = $this->generate_ticket($user_id, 'task', $task_id, $round_id);
+                if($ticket !== false){
+                    flash('Task Approved!')->success();
+                }else{
+                    $ticket = $this->generate_ticket($user_id, 'task', $task_id, $round_id);
+                    if($ticket !== false)
+                    {
+                        flash('Task Approved!')->success();
+                    }else{
+                        flash('Failed!')->error();
+                    }
+                }
             }
         }else{
             flash('Task Rejected!')->warning();
@@ -96,6 +122,75 @@ class AdminController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function batch_approval()
+    {
+        $tasks = Task::all();
+
+        return view('admin.batch_approval', compact('tasks'));
+    }
+
+    public function batch_approval_action()
+    {
+        $batch_approval_type = request('batch_approval_type', null);
+        if( ! in_array($batch_approval_type, ['by_single_user','by_task_id','secondary_all'])){
+            abort(403);
+        }
+
+        $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
+        if( ! $last_round){
+            abort(403);
+        }
+        $last_round_id = $last_round->id;
+
+        // By User ID
+        if($batch_approval_type === 'by_single_user' && request('user_id')){
+            $user = User::findOrFail(request('user_id'));
+
+            $user_pending_tasks = UserTask::where('user_id', $user->id)->where('approved', 0)->get();
+
+            if($user_pending_tasks->isEmpty()){
+                flash('This user had no pending tasks!')->warning();
+                return redirect()->route('admin.dashboard.batch_approval');
+            }
+
+            foreach($user_pending_tasks as $pending_task){
+                $task = Task::findOrFail($pending_task->task_id);
+                $ticket = $this->generate_ticket($user->id, 'task', $task->id, $task->round_id);
+
+                if($ticket !== false){
+                    flash('Generating ticket for a task failed')->error();
+                }
+            }
+
+            flash('All tasks for that user are approved now!')->success();
+            return redirect()->route('admin.dashboard.batch_approval');
+        }
+
+        // By Task ID
+        if($batch_approval_type === 'by_task_id' && request('task_id')){
+            $task = Task::findOrFail(request('task_id'));
+
+            // Get all pending tasks for this type
+            $pending_user_tasks = UserTask::where('task_id', $task->id)->where('approved', 0)->get();
+
+            if($pending_user_tasks->isEmpty()){
+                flash('There are no pending tasks of this type!')->warning();
+                return redirect()->route('admin.dashboard.batch_approval');
+            }
+
+            foreach($pending_user_tasks as $pending_task){
+                $ticket = $this->generate_ticket($pending_task->user_id, 'task', $task->id, $task->round_id);
+
+                if($ticket !== false){
+                    flash('Generating ticket for a user failed')->error();
+                }
+            }
+
+            flash('All tasks of this type are approved now!')->success();
+            return redirect()->route('admin.dashboard.batch_approval');
+        }
     }
 
     public function submit_winners()

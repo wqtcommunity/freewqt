@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 trait TicketTrait {
-    public function generate_ticket(int $user_id, string $type='task', int $related_id=null, bool $use_db_transaction=true, int $round_id=null, bool $instant_task=false)
+    public function generate_ticket(int $user_id, string $type='task', int $related_id=null, int $round_id=null, bool $instant_task=false)
     {
         // Round ID
         if( ! isset($round_id)){
@@ -36,20 +36,30 @@ trait TicketTrait {
             $user->increment('total_referrals');
         }
 
-        // Generate Ticket
-        $ticket_length = config('custom.tickets.length', 24);
-        try {
-            $ticket = bin2hex(random_bytes(($ticket_length / 2)));
-        }catch(\Throwable $e){
-            Log::error('LOG - Failed to generate ticket!');
-            return false;
-        }
-
         // Insert Ticket
-        try{
-            if($use_db_transaction){
-                DB::beginTransaction();
-            }
+        try
+        {
+            $d_counter = 0;
+            $ticket = DB::transaction(function () use($user_id, $type, $related_id, $round_id, $instant_task, $d_counter)
+            {
+                $d_counter++;
+
+                if(random_int(10, 99) >= 50){
+                    $order_by = 'desc';
+                    $add = $d_counter;
+                }else{
+                    $order_by = 'asc';
+                    $add = -$d_counter;
+                }
+
+                $get_last_ticket_number = UserRoundTicket::where('round_id', $round_id)->orderBy('ticket', $order_by)->first();
+
+                if( ! $get_last_ticket_number){
+                    $ticket = '5' . str_repeat('0', config('custom.tickets.length') - 1);
+                }else{
+                    $ticket = $get_last_ticket_number->ticket + $add;
+                }
+
                 // If Type is Task
                 if($type === 'task' && ! is_null($related_id)){
                     if($instant_task)
@@ -106,14 +116,12 @@ trait TicketTrait {
                     ]);
                 }
 
-            if($use_db_transaction){
-                DB::commit();
-            }
-        }catch(\Throwable $e){
+                return $ticket;
+            }, 3);
+        }
+        catch(\Throwable $e)
+        {
             Log::error('LOG - Failed to insert ticket: ' . $e->getMessage());
-            if($use_db_transaction){
-                DB::rollBack();
-            }
             return false;
         }
 

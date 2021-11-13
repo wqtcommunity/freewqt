@@ -23,6 +23,7 @@ class CreateRoundsTable extends Migration
             $table->boolean('active')->default(false);
             $table->boolean('completed')->default(false);
             $table->string('resulting_hash')->nullable();
+            $table->unsignedInteger('resulting_integer')->nullable();
             $table->unsignedInteger('results_total_winners_count')->nullable();
             $table->timestamps();
         });
@@ -33,7 +34,7 @@ class CreateRoundsTable extends Migration
             [
                 'block_number' => 0,
                 'active'       => true,
-                'rewards'      => 15000,
+                'rewards'      => 20000,
                 'estimated_block_time' => time() + 606000
             ]
         );

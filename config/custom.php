@@ -18,11 +18,14 @@ return [
 
     'admin_route_prefix' => env('ADMIN_ROUTE_PREFIX', 'none'),
 
-    // WARNING: Changing the following settings requires a change in database tables too
     // Tickets
+    // WARNING: Don't change after launch
     'tickets' => [
-        'length'          => 12, // must be divisible by 2
-        'representation'  => 'hex', // hex, int
-        'type_enums'      => ['signup','referral','task','game','faucet','other']
+        'length'                 => env('TICKET_LENGTH', 8), // 8 = from 10,000,0000 to 99,999,999 (89,999,999 tickets max, and middle point will be 50,000,000)
+        'type_enums'             => ['signup','referral','task','game','faucet','other']
     ],
+
+    // Referral increment ids
+    // WARNING: Don't change after launch
+    'referrer_id_increment_by' => 1500
 ];

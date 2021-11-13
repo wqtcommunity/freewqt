@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Your Tickets</h5>
                     <p class="card-text">
-                        You have {{ $user_stats->tickets ?? 0 }} tickets on this round.
+                        You have {{ $user_stats->tickets ?? 0 }} tickets for this round.
                     </p>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     <h5 class="card-title">Referrals</h5>
                     <p class="card-text">
                         You can earn more free tickets by inviting others using the following link (You currently have {{ $user_stats->referrals ?? 0 }} referrals on this round)
-                        <span class="link-box">{{ config('app.url') }}/?referrer={{ auth()->user()->uuid }}</span>
+                        <span class="link-box">{{ config('app.url') }}/?referrer={{ $incremented_ref_id }}</span>
                     </p>
                 </div>
             </div>

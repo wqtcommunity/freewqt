@@ -1,7 +1,7 @@
 @extends('layouts.dashboard', ['page_title' => 'results'])
 
 @section('content')
-    <div class="alert alert-info">IMPORTANT: After each AirDrop ends, please wait 24 hours for the results to be calculated.</div>
+    <div class="alert alert-info">IMPORTANT: Rewards will be distributed directly to BSC addresses a week after all rounds end. If you have won, please be patient!</div>
     <table class="table table-responsive table-striped table-bordered">
         <thead>
             <tr>

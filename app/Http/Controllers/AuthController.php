@@ -64,11 +64,11 @@ class AuthController extends Controller
             DB::beginTransaction();
                 // Referrer?
                 $referrer_id = null;
-                $referrer = session('referrer_uuid', null);
-                if(Str::of($referrer)->isUuid()){
-                    $get_referrer = User::where('uuid', $referrer)->first();
-                    if($get_referrer != false){
-                        $referrer_id = (int) $get_referrer->id;
+                $actual_referrer_id = session('actual_referrer_id', null);
+                if(is_int($actual_referrer_id) && $actual_referrer_id >= 1){
+                    $get_referrer = User::find($actual_referrer_id);
+                    if(isset($get_referrer)){
+                        $referrer_id = $actual_referrer_id;
                     }
                 }
 
@@ -77,14 +77,13 @@ class AuthController extends Controller
                     'wallet_address' => $request->wallet_address,
                     'password' => Hash::make($request->password),
                     'referrer_id' => $referrer_id,
-                    'uuid' => Str::orderedUuid(),
                     'email' => request('email', null)
                 ]);
 
                 // Generate Ticket and Update Stats for Referral Bonus
                 // unless No Ticket is set for referrer
                 if( ! is_null($referrer_id) && session('ref_skip_ticket', false) !== true){
-                    $this->generate_ticket($referrer_id, 'referral', $user->id, false);
+                    $this->generate_ticket($referrer_id, 'referral', $user->id);
                 }elseif( ! is_null($referrer_id) && session('ref_skip_ticket', false) === true){
                     // update "No Ref Ticket" Referrer's stats
                     User::where('id', $referrer_id)->update([
@@ -93,7 +92,7 @@ class AuthController extends Controller
                 }
 
                 // Forget Referrer
-                session()->forget(['referrer_uuid','ref_skip_ticket']);
+                session()->forget(['actual_referrer_id','ref_skip_ticket']);
 
                 // Login
                 Auth::login($user);

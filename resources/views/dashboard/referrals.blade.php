@@ -6,7 +6,7 @@
             <h5 class="card-title">Your Referral Link</h5>
             <p class="card-text">
                 Use the following link to invite people to the project and earn more chance for each round!
-                <span class="link-box">{{ config('app.url') }}/?referrer={{ auth()->user()->uuid }}</span>
+                <span class="link-box">{{ config('app.url') }}/?referrer={{ $incremented_ref_id }}</span>
             </p>
         </div>
     </div>

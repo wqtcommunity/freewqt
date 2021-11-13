@@ -23,11 +23,11 @@
             </div>
             <div class="question">
                 <strong>How many people will win each round?</strong>
-                <p>Every one with a matching ticket (according to the specified rules for each round) will win and the amount in the pool will be split between them.</p>
+                <p>Please refer to AirDrop descriptions for each round (Account Dashboard > Current AirDrop > Description).</p>
             </div>
             <div class="question">
                 <strong>How many WorkQuest tokens will be in the AirDrop pool each round?</strong>
-                <p>The amount will vary, we will specify it for each AirDrop. Please note that <span style='font-weight:bold;color:darkgreen;'>the specified aidrop amount in the pool will be split between all winners</span>.</p>
+                <p>The amount will vary, Please refer to AirDrop descriptions for each round (Account Dashboard > Current AirDrop > Description). Also please note that <span style='font-weight:bold;color:darkgreen;'>the specified airdrop amount in the pool will be split between all winners</span>.</p>
             </div>
             <div class="question">
                 <strong>Is this safe?</strong>
@@ -39,19 +39,15 @@
             </div>
             <div class="question">
                 <strong>How long will it take to announce the winners?</strong>
-                <p>We will need 6-12 hours to find the winners based on the provably fair algorithm described on <a href="{{ route('pages.provably_fair') }}">this page</a>.</p>
+                <p>We will need 24 hours to find the winners based on the fair draw method described on <a href="{{ route('pages.fair_draw') }}">this page</a>.</p>
             </div>
             <div class="question">
                 <strong>How long will it take to distribute the amounts to winners?</strong>
-                <p>After each round ends, we will distribute the amounts to winners within a few days.</p>
+                <p>Amounts will be sent to winners' BSC wallet addresses a week after "all rounds" end.</p>
             </div>
             <div class="question">
                 <strong>How do I know if the AirDrop system is fair?</strong>
-                <p>System is provably fair, please <a href="{{ route('pages.provably_fair') }}">Click Here</a> to read more.</p>
-            </div>
-            <div class="question">
-                <strong>Are you part of the WorkQuest Team?</strong>
-                <p>No, we are just a group of WorkQuest fans, we have no affiliation or connection with the WorkQuest team, so if you see any possible bugs/issues on any of our project, please note that it is not related to the main team of WorkQuest.</p>
+                <p>We are using a fair draw method, please <a href="{{ route('pages.fair_draw') }}">Click Here</a> to read more.</p>
             </div>
             <div class="question">
                 <strong>What else should I know?</strong>

@@ -19,7 +19,7 @@
                     <a class="nav-link @if($current_route === 'pages.faq') active @endif" href="{{ route('pages.faq') }}">FAQ</a>
                 </li>
                 <li class="nav-item px-md-3">
-                    <a class="nav-link @if($current_route === 'pages.provably_fair') active @endif" href="{{ route('pages.provably_fair') }}">Provably Fair</a>
+                    <a class="nav-link @if($current_route === 'pages.fair_draw') active @endif" href="{{ route('pages.fair_draw') }}">Fair Draw</a>
                 </li>
                 @auth
                     <li class="nav-item px-md-3">

@@ -34,7 +34,7 @@ Route::name('pages.')->group(function () {
     Route::get('/', [PagesController::class, 'index'])->name('index');
     Route::get('/faq', [PagesController::class, 'faq'])->name('faq');
     Route::get('/winners', [PagesController::class, 'winners'])->name('winners');
-    Route::get('/provably_fair', [PagesController::class, 'provably_fair'])->name('provably_fair');
+    Route::get('/fair_draw', [PagesController::class, 'fair_draw'])->name('fair_draw');
 });
 
 // Dashboard
@@ -68,6 +68,9 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     // Review Pending Tasks
     Route::get('/pending_tasks', [AdminController::class, 'pending_tasks'])->name('pending_tasks');
     Route::post('/pending_tasks/{user_task_id}/{action}', [AdminController::class, 'pending_tasks_action'])->name('pending_tasks.action');
+    // Batch Approval
+    Route::get('/batch_approval', [AdminController::class, 'batch_approval'])->name('batch_approval');
+    Route::post('/batch_approval', [AdminController::class, 'batch_approval_action'])->name('batch_approval.action');
     // Rounds Resource Controller
     Route::resource('rounds', AdminRoundsController::class);
     Route::patch('/rounds/activate/{round}', [AdminRoundsController::class, 'activate'])->name('rounds.activate');

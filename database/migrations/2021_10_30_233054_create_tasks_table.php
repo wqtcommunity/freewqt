@@ -18,10 +18,11 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('round_id');
             $table->string('title');
             $table->string('description');
-            $table->enum('difficulty', ['instant','easy','normal','hard','extreme','other']);
+            $table->enum('difficulty', ['instant','auto_delayed','easy','normal','hard','extreme','other']);
             $table->string('link')->nullable();
             $table->unsignedSmallInteger('tickets')->default(1);
             $table->boolean('input_required')->default(false);
+            $table->boolean('primary')->default(false);
             $table->string('input_title')->nullable();
             $table->timestamps();
 
