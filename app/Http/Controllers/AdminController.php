@@ -153,7 +153,7 @@ class AdminController extends Controller
                 $task = Task::findOrFail($pending_task->task_id);
                 $ticket = $this->generate_ticket($user->id, 'task', $task->id, $task->round_id);
 
-                if($ticket !== false){
+                if( ! $ticket){
                     flash('Generating ticket for a task failed')->error();
                 }
             }
@@ -177,7 +177,7 @@ class AdminController extends Controller
             foreach($pending_user_tasks as $pending_task){
                 $ticket = $this->generate_ticket($pending_task->user_id, 'task', $task->id, $task->round_id);
 
-                if($ticket !== false){
+                if( ! $ticket){
                     flash('Generating ticket for a user failed')->error();
                 }
             }
@@ -192,9 +192,14 @@ class AdminController extends Controller
             $done_task_id    = (int) request('done_task_id');
             $approve_task_id = (int) request('approve_task_id');
 
-            $find_done = UserTask::where('task_id', $done_task_id)->where('approved', 1)->limit(100)->get();
+            $limit = (int) request('limit', 200);
 
-            if( ! $find_done){
+            $get_task = Task::findOrFail($done_task_id);
+            $round_id = $get_task->round_id;
+
+            $find_done = UserTask::where('task_id', $done_task_id)->where('approved', 1)->limit($limit)->get();
+
+            if($find_done->isEmpty()){
                 flash('No one has done this task!')->info();
                 return redirect()->route('admin.dashboard.batch_approval');
             }
@@ -206,15 +211,18 @@ class AdminController extends Controller
                 $count['total']++;
                 $to_approve = UserTask::where('user_id', $done->user_id)->where('task_id', $approve_task_id)->where('approved', 0)->first();
                 if($to_approve){
-                    $ticket = $this->generate_ticket($to_approve->user_id, 'task', $to_approve->id, $to_approve->round_id);
+                    $ticket = $this->generate_ticket($to_approve->user_id, 'task', $to_approve->id, $round_id);
 
                     if($ticket !== false){
-                        $count['fail']++;
-                        flash('Generating ticket for a user failed')->error();
-                    }else{
                         $count['approved']++;
+                    }else{
+                        $count['fail']++;
                     }
                 }
+            }
+
+            if($count['fail'] > 0){
+                flash("Generating ticket for {$count['fail']} users failed")->error();
             }
 
             flash("Approved task #{$approve_task_id} for {$count['approved']} users who have done task #{$done_task_id}. Errors: {$count['fail']}")->success();

@@ -33,6 +33,8 @@
                 <option value="{{ $task->id }}">{{ $task->title }}</option>
             @endforeach
         </select>
+        <label for="limit">Limit Total Users</label>
+        <input required type="number" class="form-control" value="" min="1" max="1000" step="1" name="limit" id="limit">
         <button type="submit" class="btn btn-secondary mt-2">Approve for All</button>
     </form>
 
