@@ -41,7 +41,7 @@ trait TicketTrait {
         {
             $ticket = DB::transaction(function () use($user_id, $type, $related_id, $round_id, $instant_task, $increment_by)
             {
-                if(random_int(0, 1)){
+                if(rand(0, 1)){
                     $order_by = 'desc';
                     $add = $increment_by;
                 }else{

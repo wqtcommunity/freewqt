@@ -134,7 +134,7 @@ class AdminController extends Controller
     public function batch_approval_action()
     {
         $batch_approval_type = request('batch_approval_type', null);
-        if( ! in_array($batch_approval_type, ['by_single_user','by_task_id','secondary_all'])){
+        if( ! in_array($batch_approval_type, ['by_single_user','by_task_id','if_done_then_approve'])){
             abort(403);
         }
 
@@ -183,6 +183,41 @@ class AdminController extends Controller
             }
 
             flash('All tasks of this type are approved now!')->success();
+            return redirect()->route('admin.dashboard.batch_approval');
+        }
+
+        // Approve a task for all who have done another!
+        if($batch_approval_type === 'if_done_then_approve' && request('done_task_id') && request('approve_task_id'))
+        {
+            $done_task_id    = (int) request('done_task_id');
+            $approve_task_id = (int) request('approve_task_id');
+
+            $find_done = UserTask::where('task_id', $done_task_id)->where('approved', 1)->limit(100)->get();
+
+            if( ! $find_done){
+                flash('No one has done this task!')->info();
+                return redirect()->route('admin.dashboard.batch_approval');
+            }
+
+            $count['total'] = 0;
+            $count['approved'] = 0;
+            $count['fail'] = 0;
+            foreach ($find_done as $done){
+                $count['total']++;
+                $to_approve = UserTask::where('user_id', $done->user_id)->where('task_id', $approve_task_id)->where('approved', 0)->first();
+                if($to_approve){
+                    $ticket = $this->generate_ticket($to_approve->user_id, 'task', $to_approve->id, $to_approve->round_id);
+
+                    if($ticket !== false){
+                        $count['fail']++;
+                        flash('Generating ticket for a user failed')->error();
+                    }else{
+                        $count['approved']++;
+                    }
+                }
+            }
+
+            flash("Approved task #{$approve_task_id} for {$count['approved']} users who have done task #{$done_task_id}. Errors: {$count['fail']}")->success();
             return redirect()->route('admin.dashboard.batch_approval');
         }
     }
