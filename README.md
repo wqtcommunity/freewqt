@@ -18,8 +18,7 @@ The usual Laravel project installation:
 6. In your application root directory, create the .env file: `cp env_example .env`
 7. Run command `php artisan key:generate`
 8. Edit `.env` file and set all your database and other configurations (ADMIN_ROUTE_PREFIX is a prefix that applies to all admin routes)
-9. Run `php artisan migrate:fresh && php artisan db:seed` (migrate:fresh removes previous data then creates the tables again)
-10. Check the website
+9. Check the website
 
 ## IMPORTANT
 
