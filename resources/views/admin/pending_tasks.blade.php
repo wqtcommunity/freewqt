@@ -57,4 +57,14 @@
         </select>
         <button type="submit" class="btn btn-sm btn-secondary">Go</button>
     </form>
+
+    <form class="float-end" action="{{ route('admin.dashboard.pending_tasks') }}" method="GET">
+        <label for="order">Order</label>
+        <select name="order" id="order">
+            <option @if($order === 'asc') selected @endif value="asc">ID - ASC</option>
+            <option @if($order === 'desc') selected @endif value="desc">ID - DESC</option>
+            <option @if($order === 'random') selected @endif value="random">Random</option>
+        </select>
+        <button type="submit" class="btn btn-sm btn-secondary">Go</button>
+    </form>
 @endsection

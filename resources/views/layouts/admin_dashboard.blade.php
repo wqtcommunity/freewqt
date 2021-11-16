@@ -67,6 +67,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'tickets') active @endif" href="{{ route('admin.dashboard.tickets') }}">
+                            <span data-feather="book-open"></span>
+                            Tickets
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(($page_title ?? '') === 'rounds') active @endif" href="{{ route('admin.dashboard.rounds.index') }}">
                             <span data-feather="book"></span>
                             Rounds

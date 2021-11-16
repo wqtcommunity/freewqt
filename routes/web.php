@@ -62,6 +62,9 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     Route::get('/', [AdminController::class, 'index'])->name('index');
     // Users
     Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/login_as/{user_id}', [AdminController::class, 'login_as_user'])->name('login_as_user')->where(['user_id' => '[0-9]+']);
+    Route::get('/users/change_password/{user_id}', [AdminController::class, 'change_user_password'])->name('change_user_password')->where(['user_id' => '[0-9]+']);
+    Route::patch('/users/change_password/{user_id}', [AdminController::class, 'change_user_password_store'])->name('change_user_password_store')->where(['user_id' => '[0-9]+']);
     // Export Tickets
     Route::get('/export_tickets', [AdminController::class, 'export_tickets'])->name('export_tickets');
     Route::post('/export_tickets/generate', [AdminController::class, 'export_tickets_generate'])->name('export_tickets.generate');
@@ -71,6 +74,8 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     // Batch Approval
     Route::get('/batch_approval', [AdminController::class, 'batch_approval'])->name('batch_approval');
     Route::post('/batch_approval', [AdminController::class, 'batch_approval_action'])->name('batch_approval.action');
+    // Tickets
+    Route::get('/tickets', [AdminController::class, 'tickets'])->name('tickets');
     // Rounds Resource Controller
     Route::resource('rounds', AdminRoundsController::class);
     Route::patch('/rounds/activate/{round}', [AdminRoundsController::class, 'activate'])->name('rounds.activate');

@@ -31,7 +31,7 @@ class AdminController extends Controller
         $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
 
         $round['id'] = $last_round?->id;
-        $round['block'] = $last_round?->block_numer;
+        $round['block'] = $last_round?->block_number;
 
         return view('admin.index', compact('total_users', 'round'));
     }
@@ -41,6 +41,39 @@ class AdminController extends Controller
         $users = User::orderBy('id','asc')->paginate(200);
 
         return view('admin.users', compact('users'));
+    }
+
+    public function login_as_user($user_id)
+    {
+        Auth::guard('admin')->logout();
+        Auth::guard('user')->loginUsingId($user_id);
+
+        return redirect()->route('login');
+    }
+
+    public function change_user_password($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        return view('admin.change_user_password', compact('user'));
+    }
+
+    public function change_user_password_store($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        $user->password = Hash::make(request('pass'));
+        $user->save();
+
+        flash("Changed password for user #{$user->id}")->success();
+        return redirect()->route('admin.dashboard.users');
+    }
+
+    public function tickets()
+    {
+        $tickets = UserRoundTicket::orderBy('id','desc')->paginate(50);
+
+        return view('admin.tickets', compact('tickets'));
     }
 
     public function export_tickets()
@@ -84,10 +117,23 @@ class AdminController extends Controller
 
         $limit = (int) request('limit', 500);
 
-        $pending_tasks = $pending_tasks->orderBy('id','DESC')->limit($limit)->get();
+        $order = request('order',session('order', 'desc'));
+
+        if($order === 'random'){
+            session(['order' => 'random']);
+            $pending_tasks = $pending_tasks->inRandomOrder();
+        }elseif($order === 'asc'){
+            session(['order' => 'asc']);
+            $pending_tasks = $pending_tasks->orderBy('id','ASC');
+        }else{
+            session(['order' => 'desc']);
+            $pending_tasks = $pending_tasks->orderBy('id','DESC');
+        }
+
+        $pending_tasks = $pending_tasks->limit($limit)->get();
         $tasks = Task::all();
 
-        return view('admin.pending_tasks', compact('pending_tasks','tasks','filter_task','limit'));
+        return view('admin.pending_tasks', compact('pending_tasks','tasks','filter_task','limit','order'));
     }
 
     public function pending_tasks_action($user_task_id, $action)
@@ -151,9 +197,11 @@ class AdminController extends Controller
 
             foreach($user_pending_tasks as $pending_task){
                 $task = Task::findOrFail($pending_task->task_id);
-                $ticket = $this->generate_ticket($user->id, 'task', $task->id, $task->round_id);
+                for($i=1; $i<=$task->tickets; $i++){
+                    $ticket = $this->generate_ticket($user->id, 'task', $task->id, $task->round_id);
+                }
 
-                if( ! $ticket){
+                if( ! isset($ticket) || ! $ticket){
                     flash('Generating ticket for a task failed')->error();
                 }
             }
@@ -165,9 +213,11 @@ class AdminController extends Controller
         // By Task ID
         if($batch_approval_type === 'by_task_id' && request('task_id')){
             $task = Task::findOrFail(request('task_id'));
+            $reward_tickets = $task->tickets;
+            $limit = (int) request('limit', 100);
 
             // Get all pending tasks for this type
-            $pending_user_tasks = UserTask::where('task_id', $task->id)->where('approved', 0)->get();
+            $pending_user_tasks = UserTask::where('task_id', $task->id)->where('approved', 0)->limit($limit)->get();
 
             if($pending_user_tasks->isEmpty()){
                 flash('There are no pending tasks of this type!')->warning();
@@ -175,14 +225,16 @@ class AdminController extends Controller
             }
 
             foreach($pending_user_tasks as $pending_task){
-                $ticket = $this->generate_ticket($pending_task->user_id, 'task', $task->id, $task->round_id);
+                for($i=1; $i<=$reward_tickets; $i++){
+                    $ticket = $this->generate_ticket($pending_task->user_id, 'task', $task->id, $task->round_id);
+                }
 
-                if( ! $ticket){
+                if( ! isset($ticket) || ! $ticket){
                     flash('Generating ticket for a user failed')->error();
                 }
             }
 
-            flash('All tasks of this type are approved now!')->success();
+            flash("All tasks of this type for a maximum of {$limit} users are approved now!")->success();
             return redirect()->route('admin.dashboard.batch_approval');
         }
 
@@ -192,10 +244,13 @@ class AdminController extends Controller
             $done_task_id    = (int) request('done_task_id');
             $approve_task_id = (int) request('approve_task_id');
 
-            $limit = (int) request('limit', 200);
+            $limit = (int) request('limit', 100);
 
             $get_task = Task::findOrFail($done_task_id);
             $round_id = $get_task->round_id;
+
+            $approving_task = Task::findOrFail($approve_task_id);
+            $reward_tickets = $approving_task->tickets;
 
             $find_done = UserTask::where('task_id', $done_task_id)->where('approved', 1)->limit($limit)->get();
 
@@ -211,9 +266,11 @@ class AdminController extends Controller
                 $count['total']++;
                 $to_approve = UserTask::where('user_id', $done->user_id)->where('task_id', $approve_task_id)->where('approved', 0)->first();
                 if($to_approve){
-                    $ticket = $this->generate_ticket($to_approve->user_id, 'task', $to_approve->id, $round_id);
+                    for($i=1; $i<=$reward_tickets; $i++){
+                        $ticket = $this->generate_ticket($to_approve->user_id, 'task', $approve_task_id, $round_id);
+                    }
 
-                    if($ticket !== false){
+                    if(isset($ticket) && $ticket !== false){
                         $count['approved']++;
                     }else{
                         $count['fail']++;
@@ -225,7 +282,7 @@ class AdminController extends Controller
                 flash("Generating ticket for {$count['fail']} users failed")->error();
             }
 
-            flash("Approved task #{$approve_task_id} for {$count['approved']} users who have done task #{$done_task_id}. Errors: {$count['fail']}")->success();
+            flash("Approved task #{$approve_task_id} for {$count['approved']} users who have done task #{$done_task_id}. Errors: {$count['fail']}")->info();
             return redirect()->route('admin.dashboard.batch_approval');
         }
     }

@@ -5,7 +5,7 @@
 
     <section id="intro" class="my-5 py-2">
         <h1><strong>WorkQuest</strong> Airdrops</h1>
-        <h2>Free recurring <a href="https://workquest.co/" id="link_wq" target="_blank">WorkQuest</a> airdrops!</h2>
+        <h2>Learn more by reading our <a href="https://workquest.co/" id="link_wq" target="_blank">Medium</a> post!</h2>
     </section>
 
     <section id="countdown" class="animate__animated animate__jackInTheBox py-2 mb-5">

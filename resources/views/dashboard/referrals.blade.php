@@ -6,10 +6,21 @@
             <h5 class="card-title">Your Referral Link</h5>
             <p class="card-text">
                 Use the following link to invite people to the project and earn more chance for each round!
-                <span class="link-box">{{ config('app.url') }}/?referrer={{ $incremented_ref_id }}</span>
+                <span id="ref_link_copy" class="link-box">{{ config('app.url') }}/?referrer={{ $incremented_ref_id }}</span>
+                <button class="btn btn-sm my-1 btn-secondary" onclick="copyRef()" type="button">Copy</button>
             </p>
         </div>
     </div>
+    <script>
+        function copyRef() {
+            var range = document.createRange();
+            range.selectNode(document.getElementById("ref_link_copy"));
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();// to deselect
+        }
+    </script>
 
     <div class="row">
         <div class="col-12 col-lg-8">
