@@ -252,7 +252,7 @@ class AdminController extends Controller
             $approving_task = Task::findOrFail($approve_task_id);
             $reward_tickets = $approving_task->tickets;
 
-            $find_done = UserTask::where('task_id', $done_task_id)->where('approved', 1)->limit($limit)->get();
+            $find_done = UserTask::where('task_id', $done_task_id)->where('approved', 1)->orderBy('id','desc')->limit($limit)->get();
 
             if($find_done->isEmpty()){
                 flash('No one has done this task!')->info();
