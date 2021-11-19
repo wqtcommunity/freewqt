@@ -1,7 +1,6 @@
 @extends('layouts.dashboard', ['page_title' => 'tasks'])
 
 @section('content')
-    <div class="alert alert-info">After completing the tasks, please allow up to 12-24 hours for the system to check and approve them automatically. (some tasks will be approved faster than others)</div>
     <table class="table mb-5">
         <thead>
             <tr>
@@ -22,4 +21,6 @@
             @endforeach
         </tbody>
     </table>
+    <div class="alert alert-info"><small>After completing the tasks, please allow a few hours (usually faster) for the system to check and approve them automatically.</small></div>
+    <div class="alert alert-secondary">Rewards distribution date (if you win): 19th December, 2021</div>
 @endsection

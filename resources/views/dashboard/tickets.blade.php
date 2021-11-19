@@ -17,7 +17,7 @@
         @foreach($round_tickets as $round)
             <tr>
                 <td>{{ ($round_tickets->currentpage()-1) * $round_tickets->perpage() + $loop->index + 1 }}</td>
-                <td>Only for Round {{ $round->round_id }}</td>
+                <td>Obtained on Round {{ $round->round_id }}</td>
                 <td class="text-center">{{ $round->ticket }}</td>
                 <td class="text-center">{{ ucwords($round->type) }}</td>
                 <td class="text-center">@if($round->won)<strong class="text-success">Yes!</strong> <small class="text-success">({{ $round->won_amount ?? '-' }})</small>@else - @endif</td>

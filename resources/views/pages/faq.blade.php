@@ -23,11 +23,15 @@
             </div>
             <div class="question">
                 <strong>How many people will win each round?</strong>
-                <p>Please refer to AirDrop descriptions for each round (Account Dashboard > Current AirDrop > Description).</p>
+                <p>Please refer to our <a href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e" target="_blank">Medium Post</a>.</p>
             </div>
             <div class="question">
-                <strong>How many WorkQuest tokens will be in the AirDrop pool each round?</strong>
-                <p>The amount will vary, Please refer to AirDrop descriptions for each round (Account Dashboard > Current AirDrop > Description). Also please note that <span style='font-weight:bold;color:darkgreen;'>the specified airdrop amount in the pool will be split between all winners</span>.</p>
+                <strong>The timer has reached zero but it restarted afterwards, why is that?</strong>
+                <p>We have multiple (currently 4) rounds of AirDrop, so when a round is finished, another starts shortly after and resets the timer. If you have won in a round, your rewards will be safe and recorded, and will be distributed to you on 19th December, 2021.</p>
+            </div>
+            <div class="question">
+                <strong>Can I join in multiple rounds?</strong>
+                <p>Sure, each user can do various tasks on each round. The users that joins on first round will have more chance of winning, but even if you join on round 4, you'll have a chance to win!</p>
             </div>
             <div class="question">
                 <strong>Is this safe?</strong>
@@ -39,11 +43,15 @@
             </div>
             <div class="question">
                 <strong>How long will it take to announce the winners?</strong>
-                <p>We will need 24 hours to find the winners based on the fair draw method described on <a href="{{ route('pages.fair_draw') }}">this page</a>.</p>
+                <p>We will need 24 hours after each round to pick the winners, but please note that the rewards will be distributed on <span class="text-danger fw-bold">19th December, 2021</span>. So please be patient.</p>
             </div>
             <div class="question">
                 <strong>How long will it take to distribute the amounts to winners?</strong>
-                <p>Amounts will be sent to winners' BSC wallet addresses a week after "all rounds" end.</p>
+                <p>All rewards will be distributed on 19th December, 2021. So please be patient.</p>
+            </div>
+            <div class="question">
+                <strong>Why are my completed tasks pending approval?</strong>
+                <p>Please allow the system up to 12-24 hours (usually much faster, depending on queued tasks) to approve them. please be patient.</p>
             </div>
             <div class="question">
                 <strong>How do I know if the AirDrop system is fair?</strong>

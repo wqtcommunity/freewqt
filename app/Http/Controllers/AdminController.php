@@ -180,7 +180,7 @@ class AdminController extends Controller
     public function batch_approval_action()
     {
         $batch_approval_type = request('batch_approval_type', null);
-        if( ! in_array($batch_approval_type, ['by_single_user','by_task_id','if_done_then_approve'])){
+        if( ! in_array($batch_approval_type, ['by_single_user','by_task_id','if_done_then_approve','everything'])){
             abort(403);
         }
 
@@ -207,6 +207,37 @@ class AdminController extends Controller
             }
 
             flash('All tasks for that user are approved now!')->success();
+            return redirect()->route('admin.dashboard.batch_approval');
+        }
+
+        // Everything
+        if($batch_approval_type === 'everything'){
+            $tasks = Task::all();
+            $limit = (int) request('limit', 100);
+
+            foreach($tasks as $task){
+                $reward_tickets = $task->tickets;
+
+                // Get all pending tasks for this type
+                $pending_user_tasks = UserTask::where('task_id', $task->id)->where('approved', 0)->limit($limit)->get();
+
+                if($pending_user_tasks->isEmpty()){
+                    flash("There are no pending tasks of this type (Task #{$task->id})!")->warning();
+                    continue;
+                }
+
+                foreach($pending_user_tasks as $pending_task){
+                    for($i=1; $i<=$reward_tickets; $i++){
+                        $ticket = $this->generate_ticket($pending_task->user_id, 'task', $task->id, $task->round_id);
+                    }
+
+                    if( ! isset($ticket) || ! $ticket){
+                        flash('Generating ticket for a user failed')->error();
+                    }
+                }
+            }
+
+            flash("All tasks for a maximum of {$limit} users are approved now!")->success();
             return redirect()->route('admin.dashboard.batch_approval');
         }
 

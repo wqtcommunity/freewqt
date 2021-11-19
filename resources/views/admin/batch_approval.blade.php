@@ -17,6 +17,15 @@
         <button type="submit" class="btn btn-secondary mt-2">Approve for All</button>
     </form>
 
+    <h5 class="text-center alert alert-info">Approve All Tasks (Check tasks before Reward Payments)</h5>
+    <form class="mb-5" method="POST" onsubmit="return confirm('Are you sure?');" action="{{ route('admin.dashboard.batch_approval.action') }}">
+        @csrf
+        <input type="hidden" name="batch_approval_type" value="everything">
+        <label for="limit">Limit Total</label>
+        <input required type="number" class="form-control" value="70" min="1" max="1000" step="1" name="limit" id="limit">
+        <button type="submit" class="btn btn-secondary mt-2">Approve All</button>
+    </form>
+
     <h5 class="text-center alert alert-info">Approve a Task for All Users who have Completed Another Task (up to 100 users)</h5>
     <form class="mb-5" method="POST" onsubmit="return confirm('Are you sure?');" action="{{ route('admin.dashboard.batch_approval.action') }}">
         @csrf

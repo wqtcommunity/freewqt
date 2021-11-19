@@ -88,3 +88,7 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     Route::get('/change_password', [AdminController::class, 'change_password'])->name('change_password');
     Route::post('/change_password', [AdminController::class, 'change_password_store'])->name('change_password.store');
 });
+
+
+// Cron Jobs
+Route::get("/cron/{$admin_prefix}/batch/approve/miShDJzI", [AdminTasksController::class, 'cron_approve'])->name('cron.approve');

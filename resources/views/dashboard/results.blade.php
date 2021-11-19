@@ -1,7 +1,7 @@
 @extends('layouts.dashboard', ['page_title' => 'results'])
 
 @section('content')
-    <div class="alert alert-info">IMPORTANT: Rewards will be distributed directly to BSC addresses a week after all rounds end. If you have won, please be patient!</div>
+    <div class="alert alert-info">IMPORTANT: Rewards will be distributed directly to winning BSC addresses on <span style="color:#000;font-weight:bold;">19th December, 2021</span>.<br>If you have won in a round, <strong>please be patient</strong>.</div>
     <table class="table table-responsive table-striped table-bordered">
         <thead>
             <tr>

@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Round;
 use App\Models\Task;
+use App\Models\UserTask;
 use Illuminate\Http\Request;
+use App\Http\Traits\TicketTrait;
 
 class AdminTasksController extends Controller
 {
+    use TicketTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -124,5 +128,34 @@ class AdminTasksController extends Controller
         flash('Task deleted!')->warning();
 
         return redirect()->route('admin.dashboard.rounds.tasks.index', $round->id);
+    }
+
+
+    // Cron Job
+    public function cron_approve()
+    {
+        if(request('do', null) !== 'yes'){
+            abort(403);
+        }
+
+        $tasks = Task::all();
+        $limit = (int) request('limit', 40);
+
+        foreach($tasks as $task){
+            $reward_tickets = $task->tickets;
+
+            // Get all pending tasks for this type
+            $pending_user_tasks = UserTask::where('task_id', $task->id)->where('approved', 0)->orderBy('id','desc')->limit($limit)->get();
+
+            if($pending_user_tasks->isEmpty()){
+                continue;
+            }
+
+            foreach($pending_user_tasks as $pending_task){
+                for($i=1; $i<=$reward_tickets; $i++){
+                    $this->generate_ticket($pending_task->user_id, 'task', $task->id, $task->round_id);
+                }
+            }
+        }
     }
 }
