@@ -22,7 +22,7 @@
         }
     </script>
 
-    <div class="alert alert-secondary">We have exciting rewards for our Top Referrers on <strong>each round</strong> separately, you can read more on our <a target="_blank" href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e">medium page</a>.<br>Even if you win on a round, you can still win on next rounds if you have high referrals joining on those rounds (counted separately).</div>
+    <div class="alert alert-secondary">We have exciting rewards for our Top Referrers on each round separately, you can read more on our <a target="_blank" href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e">medium page</a>.<br>Even if you win top-referrer reward on a round, you can still win on next rounds if you have higher referrals than others on that round.</div>
 
     <div class="row mb-5">
         <div class="col-12 col-lg-12">
