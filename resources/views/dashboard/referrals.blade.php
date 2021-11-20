@@ -28,7 +28,7 @@
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>Round</th>
-                    <th class="text-center">Referrals Signed Up</th>
+                    <th class="text-center">Referrals Successfully Signed Up</th>
                 </tr>
                 @foreach($round_stats as $round)
                     <tr>
@@ -42,10 +42,10 @@
             </table>
         </div>
         <div class="col-12 col-lg-4">
-            <h6 class="mt-4">Total Referrals</h6>
+            <h6 class="mt-4">Total Referral Link Usage For All Rounds</h6>
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th class="text-center">For All Rounds</th>
+                    <th class="text-center fw-normal">Includes unsuccessful signups</th>
                 </tr>
                 <tr>
                     <td class="text-center">{{ auth()->user()->total_referrals }}</td>
@@ -53,4 +53,6 @@
             </table>
         </div>
     </div>
+
+    <div class="alert alert-secondary">We have exciting rewards for Top Referrers <strong>each round</strong>, you can read more on our <a target="_blank" href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e">medium page</a>.</div>
 @endsection
