@@ -23,7 +23,7 @@
     </script>
 
     <div class="row">
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-12">
             <h6 class="mt-4">Referrals for each round</h6>
             <table class="table table-bordered table-striped">
                 <tr>
@@ -39,17 +39,6 @@
                 @if($round_stats->isEmpty())
                     <tr><td colspan="2">No Referrals</td></tr>
                 @endif
-            </table>
-        </div>
-        <div class="col-12 col-lg-4">
-            <h6 class="mt-4">Total Referral Link Usage For All Rounds</h6>
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th class="text-center fw-normal">Includes unsuccessful signups</th>
-                </tr>
-                <tr>
-                    <td class="text-center">{{ auth()->user()->total_referrals }}</td>
-                </tr>
             </table>
         </div>
     </div>
