@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-body">
             <p class="card-text">
-                {{ $task->description }}
+                {!! $task->description !!}
                 @if(strlen($task->link) > 1)
                     <br>
                     <a href="{{ $task->link }}" target="_blank">{{ $task->link }}</a>
