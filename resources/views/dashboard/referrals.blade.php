@@ -43,5 +43,5 @@
         </div>
     </div>
 
-    <div class="alert alert-secondary">We have exciting rewards for Top Referrers <strong>each round</strong>, you can read more on our <a target="_blank" href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e">medium page</a>.</div>
+    <div class="alert alert-secondary">We have exciting rewards for our Top Referrers on <strong>each round</strong> separately, you can read more on our <a target="_blank" href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e">medium page</a>.</div>
 @endsection
