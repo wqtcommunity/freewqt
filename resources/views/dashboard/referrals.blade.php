@@ -22,17 +22,19 @@
         }
     </script>
 
-    <div class="alert alert-secondary">We have exciting rewards for our Top Referrers on each round separately, you can read more on our <a target="_blank" href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e">medium page</a>.<br>Even if you win top-referrer reward on a round, you can still win on next rounds if you have higher referrals than others on that round.</div>
+    <div class="alert alert-secondary">We have exciting rewards for our Top Referrers on each round separately, you can read more on our <a target="_blank" href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e">medium page</a>.<br>Even if you win top referrer reward on a round, you can still win on next rounds if you have higher referrals than others on that round.</div>
 
     <div class="row mb-5">
-        <div class="col-12 col-lg-12">
+        <div class="col-12 col-lg-8">
             <h6 class="mt-4">Referrals for each round</h6>
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>Round</th>
                     <th class="text-center">Referrals Successfully Signed Up</th>
                 </tr>
+                @php $total_refs = 0; @endphp
                 @foreach($round_stats as $round)
+                    @php $total_refs += $round->referrals; @endphp
                     <tr>
                         <td>Round #{{ $round->round_id }}</td>
                         <td class="text-center">{{ $round->referrals }}</td>
@@ -41,6 +43,17 @@
                 @if($round_stats->isEmpty())
                     <tr><td colspan="2">No Referrals</td></tr>
                 @endif
+            </table>
+        </div>
+        <div class="col-12 col-lg-4">
+            <h6 class="mt-4">Total Referrals</h6>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th class="text-center">For All Rounds</th>
+                </tr>
+                <tr>
+                    <td class="text-center">{{ $total_refs }}</td>
+                </tr>
             </table>
         </div>
     </div>
