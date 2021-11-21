@@ -9,9 +9,9 @@
         <tr>
             <th>#</th>
             <th>Wallet Address</th>
-            <th>Invite Code</th>
             <th>Referrals</th>
             <th>Email (Optional)</th>
+            <th>Invite Code</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -20,9 +20,9 @@
             <tr>
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->wallet_address }}</td>
-                <td><small>{{ $user->id + $increment_ref_id }}</small></td>
                 <td>{{ $user->total_referrals }}</td>
                 <td>{{ $user->email ?? '-' }}</td>
+                <td><small>{{ $user->id + $increment_ref_id }}</small></td>
                 <td>
                     <a class="btn btn-sm btn-primary" href="{{ route('admin.dashboard.login_as_user', $user->id) }}" onclick="return confirm('Login as this user?')">Login As</a>
                     <a class="btn btn-sm btn-secondary" href="{{ route('admin.dashboard.change_user_password', $user->id) }}" onclick="return confirm('Reset password for this user?')">Reset Password</a>
