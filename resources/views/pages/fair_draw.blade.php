@@ -17,11 +17,41 @@
 					<br>
 					Since there is no way to know the hash of a block that is going to be mined in the future, you can be sure that airdrops on this website are fair!
 					<br><br>
-					When the specified block is mined, we will use a publicly published method to extract the winning ticket numbers, which can be used by any one to be sure that the draw is fair.
-					<br><br>
-					When you complete a task, you will earn a Ticket, which is a number generated for you as task completion reward, please note that ticket numbers start to generate from {{ $tickets['mid'] }}, then 1 ticket is above it, and another time it is below it, the increase/decrease is 1 by 1 for each ticket (increase or decrease is determined randomly).
-					<br><br>
-					Amounts in the AirDrop pool <span style='font-weight:bold;color:darkgreen;'>will be split between all the winners</span> and sent directly to wallet addresses a week after all rounds have ended, so if you win please be patient.
+					When the specified block is mined, we will use the following code to generate the winning ticket numbers:
+                    <br><br>
+
+                    <code>$block_hash = 'BLOCK_HASH'; // This is specified after block is mined<br><br>
+
+$min_ticket_number = 49850000; // The exact value is defined at the end of each round (we will reduce it by 1)<br>
+$max_ticket_number = 50150000; // The exact value is defined at the end of each round (we will increase it by 1)<br><br>
+
+$total_winners = 500;<br><br>
+
+$block_hash_first_char = substr(str_replace('0x','', $block_hash), 0, 1);<br><br>
+
+$total_tickets = $max_ticket_number - $min_ticket_number;<br>
+$step = $total_tickets / $total_winners;<br><br>
+
+$hash_number = hexdec($block_hash_first_char) + 1;<br><br>
+
+$multiplier = $step - $hash_number;<br><br>
+
+$n = 0;<br>
+$winners = [];<br>
+do{<br>
+                        &nbsp;&nbsp;&nbsp;$n++;<br>
+                        &nbsp;&nbsp;&nbsp;$winner = $min_ticket_number + ($n * $multiplier);<br><br>
+
+                        &nbsp;&nbsp;&nbsp;if($winner <= $max_ticket_number){<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$winners[] = $winner;<br>
+                        &nbsp;&nbsp;&nbsp;}<br>
+}while($winner < $max_ticket_number);<br><br>
+
+print_r($winners);</code>
+                    <br><br>
+The code above will generate the winning ticket numbers once the block is mined, and you can try it yourself.
+                    <br><br>
+                    As we have specified before, each user can only win once each round (this will greatly increase the chance of all users to win), the repeating ticket numbers for the same winner will be excluded, and if total winner count gets below 500 for each round, we will pick extra winners on the final round to reach a total of 2000.
                 </p>
             </div>
         </section>
