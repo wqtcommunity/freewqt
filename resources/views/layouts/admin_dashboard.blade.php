@@ -67,6 +67,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'list_winners') active @endif" aria-current="page" href="{{ route('admin.dashboard.list_winners') }}">
+                            <span data-feather="list"></span>
+                            List of Winners
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(($page_title ?? '') === 'tickets') active @endif" href="{{ route('admin.dashboard.tickets') }}">
                             <span data-feather="book-open"></span>
                             Tickets

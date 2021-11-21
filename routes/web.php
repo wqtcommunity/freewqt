@@ -81,6 +81,9 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     Route::patch('/rounds/activate/{round}', [AdminRoundsController::class, 'activate'])->name('rounds.activate');
     // Round Tasks Resource Controller
     Route::resource('rounds.tasks', AdminTasksController::class);
+    // Winners
+    Route::get('/list_winners', [AdminController::class, 'list_winners'])->name('list_winners');
+    Route::post('/roll_back_a_winner', [AdminController::class, 'roll_back_a_winner'])->name('roll_back_a_winner');
     // Submit Winners
     Route::get('/submit_winners', [AdminController::class, 'submit_winners'])->name('submit_winners');
     Route::post('/submit_winners', [AdminController::class, 'submit_winners_store'])->name('submit_winners.store');

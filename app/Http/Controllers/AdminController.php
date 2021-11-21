@@ -365,20 +365,38 @@ class AdminController extends Controller
                     $ticket = UserRoundTicket::where('round_id',request('round_id'))->where('ticket', $winner->ticket)->first();
 
                     if( ! $ticket){
+                        $ticket = UserRoundTicket::where('ticket', $winner->ticket)->first();
+                    }
+
+                    if( ! $ticket){
                         flash("Ticket Not Found: {$winner->ticket}")->error();
                         throw new \Exception("Ticket not found: {$winner->ticket}");
                     }
 
                     $user_id = (int)$ticket->user_id;
 
-                    $ticket->won = true;
-                    $ticket->won_amount = $winner->amount;
-                    $ticket->save();
+                    if($ticket->won || $ticket->won_amount > 0){
+                        flash("Ticket {$winner->ticket} was already marked as won! skipping this one...")->warning();
+                        continue;
+                    }else{
+                        $ticket->won = true;
+                        $ticket->won_amount = $winner->amount;
+                        $ticket->save();
 
-                    UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->update([
-                        'won'        => true,
-                        'won_amount' => DB::raw('won_amount + '.$winner->amount)
-                    ]);
+                        $update = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->update([
+                            'won'        => true,
+                            'won_amount' => DB::raw('won_amount + '.$winner->amount)
+                        ]);
+
+                        if($update < 1){
+                            UserRoundStats::create([
+                                'user_id'    => $user_id,
+                                'round_id'   => request('round_id'),
+                                'won'        => true,
+                                'won_amount' => $winner->amount
+                            ]);
+                        }
+                    }
                 }
             DB::commit();
         }
@@ -417,5 +435,53 @@ class AdminController extends Controller
 
         flash('Password changed!')->success();
         return redirect()->route('admin.dashboard.change_password');
+    }
+
+    public function list_winners()
+    {
+        $winners = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('user_round_stats.won', 1)->orderBy('user_round_stats.round_id', 'desc')->orderBy('user_round_stats.won_amount', 'desc')->get();
+
+        return view('admin.list_winners', compact('winners'));
+    }
+
+    public function roll_back_a_winner(){
+        request()->validate([
+            'round_id' => ['required','integer','exists:rounds,id'],
+            'user_id'  => ['required','integer','exists:users,id'],
+            'pass'     => ['required']
+        ]);
+
+        if(request('pass') != '4ZofbVMDcSMcMlRcd'){
+            abort(403);
+        }
+
+        $user_round_stats = UserRoundStats::where('round_id', request('round_id'))->where('user_id', request('user_id'))->first();
+
+        if( ! $user_round_stats){
+            abort(404);
+        }
+        
+        $update_stats = UserRoundStats::where('round_id', request('round_id'))->where('user_id', request('user_id'))
+            ->update([
+            'won' => null,
+            'won_amount' => 0
+        ]);
+
+        $update_tickets = UserRoundTicket::where('round_id', request('round_id'))->where('user_id', request('user_id'))
+            ->update([
+                'won' => null,
+                'won_amount' => null
+        ]);
+
+        if($update_stats > 0 && $update_tickets > 0){
+            $user_id = request('user_id');
+            $round_id = request('round_id');
+            flash("Updated {$update_stats} round stats and {$update_tickets} tickets for user #{$user_id} on round #{$round_id}")->success();
+        }else
+        {
+            flash("Something went wrong, updated {$update_stats} stats and {$update_tickets} tickets")->error();
+        }
+
+        return redirect()->route('admin.dashboard.list_winners');
     }
 }
