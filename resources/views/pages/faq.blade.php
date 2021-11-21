@@ -19,7 +19,7 @@
             </div>
 			<div class="question">
                 <strong>Will I always win?</strong>
-                <p>No, but by completing more tasks you will increase your chance of winning on each AirDrop round.</p>
+                <p>No, but by completing more tasks you will increase your chance of winning on each AirDrop round. Keep in mind that if you participate in all rounds, you will have a separate chance to win each round! (but only once each round)</p>
             </div>
             <div class="question">
                 <strong>How many people will win each round?</strong>
@@ -52,6 +52,10 @@
             <div class="question">
                 <strong>Why are my completed tasks pending approval?</strong>
                 <p>Please allow the system up to 12-24 hours (usually much faster, depending on queued tasks) to approve them. please be patient.</p>
+            </div>
+            <div class="question">
+                <strong>How many times can I win?</strong>
+                <p>If you participate in all rounds and complete the tasks for all rounds, you will have a chance to win up to 4 times during 4 rounds (if 1 of your tickets have winning number on that round), but you can <span class="fw-bold">only win once each round</span>.<br>And if you only join on the last round (round 4) you will have a chance to win 1 time.</p>
             </div>
             <div class="question">
                 <strong>How do I know if the AirDrop system is fair?</strong>

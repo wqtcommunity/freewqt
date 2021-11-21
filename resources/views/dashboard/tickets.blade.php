@@ -20,7 +20,7 @@
                 <td>Obtained on Round {{ $round->round_id }}</td>
                 <td class="text-center">{{ $round->ticket }}</td>
                 <td class="text-center">{{ ucwords($round->type) }}</td>
-                <td class="text-center">@if($round->won)<strong class="text-success">Yes!</strong> <small class="text-success">({{ $round->won_amount ?? '-' }})</small>@else - @endif</td>
+                <td class="text-center">@if($round->round_id < $last_round_id)<a href="{{ route('dashboard.results') }}"><small>Check Results</small></a>@else - @endif</td>
                 <td class="text-center">
                     {{ $round->created_at->format('Y-m-d') }}
                     <small class="d-md-block">{{ $round->created_at->format('H:i A') }}</small>

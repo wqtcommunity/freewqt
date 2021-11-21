@@ -49,7 +49,7 @@ trait TicketTrait {
                     $add = -$increment_by;
                 }
 
-                $get_last_ticket_number = UserRoundTicket::where('round_id', $round_id)->orderBy('ticket', $order_by)->first();
+                $get_last_ticket_number = UserRoundTicket::orderBy('ticket', $order_by)->first();
 
                 if( ! $get_last_ticket_number){
                     $ticket = '5' . str_repeat('0', config('custom.tickets.length') - 1);

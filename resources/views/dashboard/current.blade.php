@@ -1,6 +1,9 @@
 @extends('layouts.dashboard', ['page_title' => 'current_airdrop'])
 
 @section('content')
+    @if($current_round['id'] > 1)
+        <div class="alert alert-info">Round #{{ $current_round['id'] - 1 }} has ended, and Round #{{ $current_round['id'] }} has just started!</div>
+    @endif
     <h5 class="alert alert-secondary text-center">Round {{ $current_round['id'] }}<br><small style="font-weight:normal;">Rewards distribution date for all rounds (if you win): 19th December 2021</small></h5>
     @if($current_round['remaining_time_ms'] < 1)
         <div class="alert alert-info">It appears that the countdown timer has reached 0!<br><br><strong>Please wait 24 hours</strong> for the results to be calculated.</div>

@@ -91,9 +91,12 @@ class DashboardController extends Controller
 
     public function tickets()
     {
+        $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
+        $last_round_id = $last_round->id;
+
         $round_tickets = UserRoundTicket::select(['round_id','ticket','type','won','won_amount','created_at'])->where('user_id', auth()->user()->id)->orderBy('round_id', 'DESC')->paginate(200);
 
-        return view('dashboard.tickets', compact('round_tickets'));
+        return view('dashboard.tickets', compact('round_tickets','last_round_id'));
     }
 
     public function current()
@@ -105,8 +108,23 @@ class DashboardController extends Controller
 
     public function results()
     {
+        $test_if_up = request('test_if_up', false);
+
+        $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
+        $last_round_id = $last_round->id;
+        $previous_round_id = $last_round_id - 1;
+
+        $remaining_hours = false;
+        if($previous_round_id > 0){
+            $get_previous_round = Round::where('id', $previous_round_id)->first();
+            if($get_previous_round){
+                $remaining_seconds = ($get_previous_round->estimated_block_time + 90010) - time();
+                $remaining_hours = floor($remaining_seconds / 3600);
+            }
+        }
+
         $user_round_stats = UserRoundStats::where('user_id', auth()->user()->id)->orderBy('round_id','desc')->limit(10)->get();
-        return view('dashboard.results', compact('user_round_stats'));
+        return view('dashboard.results', compact('user_round_stats','last_round_id','remaining_hours','test_if_up','previous_round_id'));
     }
 
     public function referrals()
