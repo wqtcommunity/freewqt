@@ -56,9 +56,9 @@ The code above will generate the winning ticket numbers once the block is mined,
                     Your tickets for each round will be saved and used for the next rounds as well, but if you complete the tasks for the next rounds, you will have a higher chance of winning.
                     <br><br>
                     <span class="fw-bold">Lottery Winners</span><br><br>
-                    First Winner = <code>Smallest Ticket Number + hexdec(First 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
-                    Second Winner = <code>Smallest Ticket Number + hexdec(Next 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
-                    Third Winner = <code>Smallest Ticket Number + hexdec(Next 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
+                    First Winner = <code>Smallest Ticket Number + (int) hexdec(First 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
+                    Second Winner = <code>Smallest Ticket Number + (int) hexdec(Next 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
+                    Third Winner = <code>Smallest Ticket Number + (int) hexdec(Next 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
                 </p>
             </div>
         </section>
