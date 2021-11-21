@@ -451,33 +451,40 @@ class AdminController extends Controller
             'pass'     => ['required']
         ]);
 
+        $round_id = (int)request('round_id');
+        $user_id  = (int)request('user_id');
+
         if(request('pass') != '4ZofbVMDcSMcMlRcd'){
             abort(403);
         }
 
-        $user_round_stats = UserRoundStats::where('round_id', request('round_id'))->where('user_id', request('user_id'))->first();
+        $user_round_stats = UserRoundStats::where('round_id', $round_id)->where('user_id', $user_id)->first();
 
         if( ! $user_round_stats){
             abort(404);
         }
-        
-        $update_stats = UserRoundStats::where('round_id', request('round_id'))->where('user_id', request('user_id'))
-            ->update([
+
+        $update_stats = UserRoundStats::where('round_id', $round_id)->where('user_id', $user_id)
+            ->where('won', 1)
+            ->limit(1)
+            ->update(
+        [
             'won' => null,
             'won_amount' => 0
         ]);
 
-        $update_tickets = UserRoundTicket::where('round_id', request('round_id'))->where('user_id', request('user_id'))
-            ->update([
+        $update_tickets = UserRoundTicket::where('round_id', $round_id)->where('user_id', $user_id)
+            ->where('won', 1)
+            ->update(
+        [
                 'won' => null,
                 'won_amount' => null
         ]);
 
         if($update_stats > 0 && $update_tickets > 0){
-            $user_id = request('user_id');
-            $round_id = request('round_id');
             flash("Updated {$update_stats} round stats and {$update_tickets} tickets for user #{$user_id} on round #{$round_id}")->success();
-        }else
+        }
+        else
         {
             flash("Something went wrong, updated {$update_stats} stats and {$update_tickets} tickets")->error();
         }
