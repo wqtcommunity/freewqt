@@ -17,18 +17,12 @@
 					<br>
 					Since there is no way to know the hash of a block that is going to be mined in the future, you can be sure that airdrops on this website are fair!
 					<br><br>
-					When you complete a task, you will earn a Ticket, which is a number generated for you as task completion reward.
+					When the specified block is mined, we will use a publicly published method to extract the winning ticket numbers, which can be used by any one to be sure that the draw is fair.
 					<br><br>
-					After the specified block is mined, we will take the first 6 characters of its Hash (excluding 0x), then convert it to decimal: <code>hexdec($six_chars)</code>, if the resulting number if smaller than {{ $tickets['min'] }}, then we will add {{ $tickets['mid'] }} to it, and if it is larger than {{ $tickets['max'] }}, we will subtract {{ $tickets['mid'] }} from it! But if the resulting number is between those, we will not add/subtract anything.
-					<br><br>
-					Now back to winners, we will pick a predetermined (in each round description) number of winners that have the closest ticket number to the final result of the hash above!
-					<b></b>
-					For example if the resulting number is 10,000,555 and your number is closer than others to it, you are a winner! you can even be far away from that result and still win if no one else has a closer ticket.
-					<br><br>
-					Please note that ticket numbers start to generate from {{ $tickets['mid'] }}, then 1 ticket is above it, and another time it is below it, the increase/decrease is 1 by 1 for each ticket (increase or decrease is determined randomly).
+					When you complete a task, you will earn a Ticket, which is a number generated for you as task completion reward, please note that ticket numbers start to generate from {{ $tickets['mid'] }}, then 1 ticket is above it, and another time it is below it, the increase/decrease is 1 by 1 for each ticket (increase or decrease is determined randomly).
 					<br><br>
 					Amounts in the AirDrop pool <span style='font-weight:bold;color:darkgreen;'>will be split between all the winners</span> and sent directly to wallet addresses a week after all rounds have ended, so if you win please be patient.
-				</p>
+                </p>
             </div>
         </section>
     </div>
