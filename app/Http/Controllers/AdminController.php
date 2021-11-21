@@ -38,9 +38,23 @@ class AdminController extends Controller
 
     public function users()
     {
-        $users = User::orderBy('total_referrals','desc')->orderBy('id','asc')->paginate(200);
+        $increment_ref_id = config('custom.referrer_id_increment_by');
 
-        return view('admin.users', compact('users'));
+        $tasks = false;
+        if(request('search', false) && request('search_by', false) && in_array(request('search_by'), ['id','wallet_address','email'])){
+            $users = User::where(request('search_by'), request('search'))->get();
+            if($users->isNotEmpty()){
+                $tasks = UserTask::where('user_id', $users->first()->id)->orderBy('id', 'desc')->get();
+
+                if($tasks->isEmpty()){
+                    $tasks = false;
+                }
+            }
+        }else{
+            $users = User::orderBy('total_referrals','desc')->orderBy('id','asc')->paginate(200);
+        }
+
+        return view('admin.users', compact('users','tasks','increment_ref_id'));
     }
 
     public function login_as_user($user_id)
