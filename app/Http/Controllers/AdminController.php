@@ -51,7 +51,7 @@ class AdminController extends Controller
                 }
             }
         }else{
-            $users = User::orderBy('total_referrals','desc')->orderBy('id','asc')->paginate(200);
+            $users = User::orderBy('total_referrals','desc')->orderBy('id','asc')->paginate(20);
         }
 
         return view('admin.users', compact('users','tasks','increment_ref_id'));

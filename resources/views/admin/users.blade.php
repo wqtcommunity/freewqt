@@ -4,7 +4,7 @@
     @if(request('search'))
         <div class="alert alert-info">Search for {{ request('search_by') }} {{ request('search') }}</div>
     @endif
-    <table id="dataTable" class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped">
         <thead>
         <tr>
             <th>#</th>
