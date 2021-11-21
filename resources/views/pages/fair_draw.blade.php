@@ -52,6 +52,8 @@ print_r($winners);</code>
 The code above will generate the winning ticket numbers once the block is mined, and you can try it yourself.
                     <br><br>
                     As we have specified before, each user can only win once each round (this will greatly increase the chance of all users to win), the repeating ticket numbers for the same winner will be excluded, and if total winner count gets below 500 for each round, we will pick extra winners on the final round to reach a total of 2000.
+                    <br><br>
+                    Your tickets for each round will be saved and used for the next rounds as well, but if you complete the tasks for the next rounds, you will have a higher chance of winning.
                 </p>
             </div>
         </section>
