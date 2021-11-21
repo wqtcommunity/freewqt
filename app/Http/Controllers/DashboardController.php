@@ -124,7 +124,15 @@ class DashboardController extends Controller
         }
 
         $user_round_stats = UserRoundStats::where('user_id', auth()->user()->id)->orderBy('round_id','desc')->limit(10)->get();
-        return view('dashboard.results', compact('user_round_stats','last_round_id','remaining_hours','test_if_up','previous_round_id'));
+
+        $won_amount = 0;
+        foreach($user_round_stats as $round_stats){
+            if($round_stats->won_amount && $round_stats->won_amount > 0){
+                $won_amount += (int)bcmul('1', "{$round_stats->won_amount}", 0);
+            }
+        }
+
+        return view('dashboard.results', compact('user_round_stats','last_round_id','remaining_hours','test_if_up','previous_round_id','won_amount'));
     }
 
     public function referrals()
