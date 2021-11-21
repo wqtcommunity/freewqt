@@ -441,6 +441,10 @@ class AdminController extends Controller
     {
         $winners = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('user_round_stats.won', 1)->orderBy('user_round_stats.round_id', 'desc')->orderBy('user_round_stats.won_amount', 'desc')->get();
 
+        if(request('json', false)){
+            return $winners;
+        }
+
         return view('admin.list_winners', compact('winners'));
     }
 

@@ -5,7 +5,6 @@
         <thead>
         <tr>
             <th>Round</th>
-            <th>User ID</th>
             <th>Wallet Address</th>
             <th>Tickets</th>
             <th>Won Amount</th>
@@ -16,7 +15,6 @@
         @foreach($winners as $winner)
             <tr>
                 <td>{{ $winner->round_id }}</td>
-                <td>{{ $winner->user_id }}</td>
                 <td><small>{{ $winner->wallet_address }}</small></td>
                 <td>{{ $winner->tickets }}</td>
                 <td>{{ $winner->won_amount }} WQT</td>
