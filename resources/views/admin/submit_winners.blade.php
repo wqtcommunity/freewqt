@@ -19,6 +19,22 @@
             <br>
             <code><pre>[<br>&#9;{"ticket":"1fa166baf064", "amount":"1.25"},<br>&#9;{"ticket":"3e3230b91bf8", "amount":"2.00"}<br>]</pre></code>
         </div>
+        <div class="mb-3">
+            <input type="checkbox" value="yes" checked="checked" name="check_previous_round_tickets" id="check_previous_round_tickets">
+            <label for="check_previous_round_tickets" class="form-label">Check Previous round tickets too, if we want previous round participants to also win.</label>
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" value="yes" name="override_40_limit" id="override_40_limit">
+            <label for="override_40_limit" class="form-label">Override 40 WQT limit (used for submitting Lottery and Referral Winners)</label>
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" value="yes" name="override_user_stats" id="override_user_stats">
+            <label for="override_user_stats" class="form-label">Override User Stats - If not checked, users that have won anything else on this round will be skipped.</label>
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" value="yes" name="even_create_user_stats" id="even_create_user_stats">
+            <label for="even_create_user_stats" class="form-label">Create User Stats Row if doesn't exist - Warning, only use if absolutely necessary</label>
+        </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

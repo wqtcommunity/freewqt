@@ -362,9 +362,14 @@ class AdminController extends Controller
         {
             DB::beginTransaction();
                 foreach($winners as $winner){
+                    if($winner->amount > 40 && request('override_40_limit', false) !== 'yes'){
+                        flash("Reward is more that 40 and override isn't set, skipping ticket: {$winner->ticket}")->error();
+                        continue;
+                    }
+
                     $ticket = UserRoundTicket::where('round_id',request('round_id'))->where('ticket', $winner->ticket)->first();
 
-                    if( ! $ticket){
+                    if( ! $ticket && request('check_previous_round_tickets', false) === 'yes'){
                         $ticket = UserRoundTicket::where('ticket', $winner->ticket)->first();
                     }
 
@@ -373,29 +378,61 @@ class AdminController extends Controller
                         throw new \Exception("Ticket not found: {$winner->ticket}");
                     }
 
+                    // Check User Stats
+                    if(request('override_user_stats', false) !== 'yes'){
+
+                        $get_user_stats = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->first();
+                        if( ! $get_user_stats){
+                            flash("User stats not found, and override_user_stats isn't set for ticket: {$winner->ticket}")->error();
+                            continue;
+                        }
+
+                        if($get_user_stats->won || $get_user_stats->won_amount > 0){
+                            flash("User stats is already set as WON, skipping ticket: {$winner->ticket}")->error();
+                            continue;
+                        }
+                    }
+
                     $user_id = (int)$ticket->user_id;
 
+                    // Check if ticket already marked as won?
                     if($ticket->won || $ticket->won_amount > 0){
                         flash("Ticket {$winner->ticket} was already marked as won! skipping this one...")->warning();
                         continue;
-                    }else{
-                        $ticket->won = true;
-                        $ticket->won_amount = $winner->amount;
-                        $ticket->save();
+                    }
 
+                    if(request('override_user_stats', false) !== 'yes'){
+                        $update = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->update([
+                            'won'        => true,
+                            'won_amount' => $winner->amount
+                        ]);
+                    }else{
                         $update = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->update([
                             'won'        => true,
                             'won_amount' => DB::raw('won_amount + '.$winner->amount)
                         ]);
+                    }
 
-                        if($update < 1){
-                            UserRoundStats::create([
-                                'user_id'    => $user_id,
-                                'round_id'   => request('round_id'),
-                                'won'        => true,
-                                'won_amount' => $winner->amount
-                            ]);
-                        }
+                    if($update < 1 && request('even_create_user_stats', false) === 'yes'){
+                        UserRoundStats::create([
+                            'user_id'    => $user_id,
+                            'round_id'   => request('round_id'),
+                            'won'        => true,
+                            'won_amount' => $winner->amount
+                        ]);
+
+                        $ticket->won = true;
+                        $ticket->won_amount = $winner->amount;
+                        $ticket->save();
+                    }else{
+                        flash("Skipping as user stats row doesn't exist for ticket owner of: {$winner->ticket}")->warning();
+                        continue;
+                    }
+
+                    if($update > 0){
+                        $ticket->won = true;
+                        $ticket->won_amount = $winner->amount;
+                        $ticket->save();
                     }
                 }
             DB::commit();
@@ -404,7 +441,7 @@ class AdminController extends Controller
         {
             DB::rollBack();
             Log::error("Error while updating winners: ".$e->getMessage());
-            flash('An error occurred while updating winners! Please check the logs.')->error();
+            flash('An error occurred while updating winners! '.$e->getMessage())->error();
             return redirect()->route('admin.dashboard.submit_winners');
         }
 
