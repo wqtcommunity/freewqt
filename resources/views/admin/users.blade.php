@@ -9,7 +9,9 @@
         <tr>
             <th>#</th>
             <th>Wallet Address</th>
-            <th>Referrals</th>
+            @if(request('search_by'))
+                <th>Estimated Total Referrals</th>
+            @endif
             <th>Email (Optional)</th>
             <th>Invite Code</th>
             <th>Actions</th>
@@ -20,7 +22,9 @@
             <tr>
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->wallet_address }}</td>
-                <td>{{ $user->total_referrals }}</td>
+                @if(request('search_by'))
+                    <td>{{ $user->total_referrals }}</td>
+                @endif
                 <td>{{ $user->email ?? '-' }}</td>
                 <td><small>{{ $user->id + $increment_ref_id }}</small></td>
                 <td>

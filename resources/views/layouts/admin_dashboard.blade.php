@@ -85,9 +85,27 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(($page_title ?? '') === 'export_tickets') active @endif" href="{{ route('admin.dashboard.export_tickets') }}">
-                            <span data-feather="external-link"></span>
-                            Export Tickets
+                        <a class="nav-link @if(($page_title ?? '') === 'find_winners') active @endif" href="{{ route('admin.dashboard.find_winners') }}">
+                            <span data-feather="search"></span>
+                            Find Winners
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'find_lottery_winners') active @endif" href="{{ route('admin.dashboard.find_lottery_winners') }}">
+                            <span data-feather="search"></span>
+                            Find Lottery Winners
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'top_referrers') active @endif" aria-current="page" href="{{ route('admin.dashboard.top_referrers') }}">
+                            <span data-feather="globe"></span>
+                            Top Referrers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'test_winning_tickets') active @endif" href="{{ route('admin.dashboard.test_winning_tickets') }}">
+                            <span data-feather="user-check"></span>
+                            Test Winning Tickets
                         </a>
                     </li>
                     <li class="nav-item">

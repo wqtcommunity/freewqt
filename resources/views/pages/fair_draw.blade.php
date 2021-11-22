@@ -20,10 +20,10 @@
 					When the specified block is mined, we will use the following code to generate the winning ticket numbers:
                     <br><br>
 
-                    <code>$block_hash = 'BLOCK_HASH'; // This is specified after the predetermined block number is mined<br><br>
+                    <code>$block_hash = 'BLOCK_HASH'; // This is determined after the predetermined block number is mined<br><br>
 
-$min_ticket_number = 49850000; // The exact value is defined at the end of each round and will be publicly shared<br>
-$max_ticket_number = 50150000; // The exact value is defined at the end of each round and will be publicly shared<br><br>
+$min_ticket_number = 49850000; // The exact value is determined at the end of each round<br>
+$max_ticket_number = 50150000; // The exact value is determined at the end of each round<br><br>
 
 $total_winners = 500;<br><br>
 

@@ -1,20 +1,176 @@
 @extends('layouts.pages', ['pg' => 'pages'])
 
+@section('head')
+    <link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/js/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.responsive.min.js') }}"></script>
+    <style>
+        #winnersTab .nav-link{
+            color: #405575;
+        }
+        #winnersTab .nav-link:hover{
+            border-bottom: 0;
+        }
+        #winnersTab .nav-link.active{
+            border-top: 3px solid #BBB !important;
+            font-weight: bold;
+        }
+        #amount_date {
+            right:0;
+            top:10px;
+        }
+        #amount_date strong {
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .dataTables_length {
+                text-align: left !important;
+                margin-bottom: 0.5rem;
+            }
+            .dataTables_filter {
+                text-align: left !important;
+            }
+
+            #amount_date {
+                top: -100px !important;
+                left: 0;
+                text-align: center !important;
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     @include('pages.includes._nav')
 
     <div class="container">
-        <section class="my-5 py-2">
-            <h2 class="text-center">Previous <strong class="text-primary">Winners</strong></h2>
+        <section class="mt-5 mb-3 py-2">
+            <h2 class="text-center">WQT AirDrop <strong class="text-info">Winners</strong></h2>
         </section>
+        <ul class="nav nav-tabs position-relative" id="winnersTab">
+            <span id="amount_date" class="text-end position-absolute">Amount Distribution: <strong>19th December, 2021</strong></span>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link @if(request('round', 1) == 1) active @endif" id="round1-tab" href="{{ route('pages.winners',['round' => 1]) }}">Round #1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @if(request('round', 1) == 2) active @endif" id="round2-tab" href="{{ route('pages.winners',['round' => 2]) }}">Round #2</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @if(request('round', 1) == 3) active @endif" id="round3-tab" href="{{ route('pages.winners',['round' => 3]) }}">Round #3</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @if(request('round', 1) == 4) active @endif" id="round4-tab" href="{{ route('pages.winners',['round' => 4]) }}">Round #4</a>
+            </li>
+        </ul>
+        <div style="background:#FFF;" class="tab-content p-3 border-1 border-top-0 border table-responsive" id="winnersTabContent">
+            @if(request('round', 1) == 1)
+                <div class="tab-pane fade show active" id="round1">
+                    <ul class="nav nav-pills justify-content-center" id="roundTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" aria-current="page" id="airdrop_winners_tab" data-bs-toggle="tab" data-bs-target="#airdrop_winners" type="button" role="tab" aria-controls="airdrop_winners" aria-selected="true">AirDrop Winners</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" aria-current="page" id="lottery_winners_tab" data-bs-toggle="tab" data-bs-target="#lottery_winners" type="button" role="tab" aria-controls="lottery_winners" aria-selected="true">Lottery Winners</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" aria-current="page" id="top_referrers_tab" data-bs-toggle="tab" data-bs-target="#top_referrers" type="button" role="tab" aria-controls="top_referrers" aria-selected="true">Top Referrers</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="roundTabContent">
+                        <div class="tab-pane fade show active" id="airdrop_winners" role="tabpanel" aria-labelledby="airdrop_winners">
+                            <table id="airdrop_winners_table" class="table table-borderless table-striped table-responsive">
+                                <thead>
+                                <tr>
+                                    <th>Ticket #</th>
+                                    <th>Wallet Address</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1512125</td>
+                                    <td>0xF3749337F1c28487a7D4359b4C2E304B49c6593e</td>
+                                    <td>40 WQT</td>
+                                </tr>
+                                <tr>
+                                    <td>1512125</td>
+                                    <td>0xF3749337F1c28487a7D4359b4C2E304B49c6593e</td>
+                                    <td>40 WQT</td>
+                                </tr>
+                                <tr>
+                                    <td>1512125</td>
+                                    <td>0xF3749337F1c28487a7D4359b4C2E304B49c6593e</td>
+                                    <td>40 WQT</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade show" id="lottery_winners" role="tabpanel" aria-labelledby="lottery_winners">
+                            <table id="lottery_winners_table" class="table table-borderless table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Ticket #</th>
+                                    <th>Wallet Address</th>
+                                    <th>Amount</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
+                            <table id="top_referrers_table" class="table table-borderless table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Wallet Address</th>
+                                    <th>Total Referrals</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
-        <section class="my-5 py-2">
-            <div class="question">
-                <strong>Round #1</strong>
-                <p>Winners:</p>
-            </div>
-        </section>
+            @if(request('round', 1) == 2)
+                <div class="tab-pane fade show active" id="round2">Live Now! <a href="{{ route('login') }}">Login and complete the tasks to participate!</a></div>
+            @endif
+
+            @if(request('round', 1) == 3)
+                <div class="tab-pane fade show active" id="round3">Will go live after round 2 finishes</div>
+            @endif
+
+            @if(request('round', 1) == 4)
+                 <div class="tab-pane fade show active" id="round4">Will go live after round 3 finishes</div>
+            @endif
+        </div>
     </div>
 
     @include('pages.includes._footer')
+
+    @section('scripts')
+    <script>
+        $(document).ready( function () {
+            $('#airdrop_winners_table').DataTable();
+            $('#lottery_winners_table').DataTable();
+            $('#top_referrers_table').DataTable();
+        });
+    </script>
+    @endsection
 @endsection

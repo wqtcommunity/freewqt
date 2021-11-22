@@ -51,7 +51,7 @@ class AdminController extends Controller
                 }
             }
         }else{
-            $users = User::orderBy('total_referrals','desc')->orderBy('id','asc')->paginate(20);
+            $users = User::orderBy('id','desc')->paginate(20);
         }
 
         return view('admin.users', compact('users','tasks','increment_ref_id'));
@@ -85,9 +85,47 @@ class AdminController extends Controller
 
     public function tickets()
     {
-        $tickets = UserRoundTicket::orderBy('id','desc')->paginate(50);
+        if(request('round_id', false)){
+            $tickets = UserRoundTicket::where('round_id', request('round_id'))->orderBy('id','desc')->paginate(50);
+        }else{
+            $tickets = UserRoundTicket::orderBy('round_id','desc')->orderBy('id','desc')->paginate(50);
+        }
 
         return view('admin.tickets', compact('tickets'));
+    }
+
+    public function tickets_action()
+    {
+        request()->validate([
+            'action'    => ['required', 'string', 'in:delete,update'],
+            'ticket_id' => ['required', 'integer', 'exists:user_round_tickets,id'],
+            'round_id'  => ['required', 'integer', 'exists:rounds,id'],
+            'user_id'   => ['required', 'integer', 'exists:users,id'],
+            'ticket'    => ['required', 'integer', 'exists:user_round_tickets,ticket'],
+        ]);
+
+        // Delete - Only in case a task gets mistakenly approved
+        if(request('action') === 'delete'){
+            $delete = UserRoundTicket::where('id', request('ticket_id'))
+                ->where('round_id', request('round_id'))
+                ->where('user_id', request('user_id'))
+                ->where('ticket', request('ticket'))
+                ->limit(1)
+                ->delete();
+
+            if($delete){
+                UserRoundStats::where('user_id', request('user_id'))
+                    ->where('round_id', request('round_id'))
+                    ->limit(1)
+                    ->update([
+                        'tickets' => DB::raw('tickets - 1')
+                    ]);
+
+                flash("Ticket ".request('ticket')." Deleted!")->success();
+            }
+        }
+
+        return redirect()->route('admin.dashboard.tickets');
     }
 
     public function export_tickets()
@@ -358,6 +396,11 @@ class AdminController extends Controller
 
         $round = Round::findOrFail(request('round_id'));
 
+        if($round->completed < 1 || $round->active > 0){
+            flash('This round is active, you cannot submit winners for it!')->error();
+            return redirect()->route('admin.dashboard.submit_winners');
+        }
+
         try
         {
             DB::beginTransaction();
@@ -378,6 +421,8 @@ class AdminController extends Controller
                         throw new \Exception("Ticket not found: {$winner->ticket}");
                     }
 
+                    $user_id = (int)$ticket->user_id;
+
                     // Check User Stats
                     if(request('override_user_stats', false) !== 'yes'){
 
@@ -393,8 +438,6 @@ class AdminController extends Controller
                         }
                     }
 
-                    $user_id = (int)$ticket->user_id;
-
                     // Check if ticket already marked as won?
                     if($ticket->won || $ticket->won_amount > 0){
                         flash("Ticket {$winner->ticket} was already marked as won! skipping this one...")->warning();
@@ -402,34 +445,34 @@ class AdminController extends Controller
                     }
 
                     if(request('override_user_stats', false) !== 'yes'){
-                        $update = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->update([
+                        $update = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->limit(1)->update([
                             'won'        => true,
                             'won_amount' => $winner->amount
                         ]);
                     }else{
-                        $update = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->update([
+                        $update = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->limit(1)->update([
                             'won'        => true,
                             'won_amount' => DB::raw('won_amount + '.$winner->amount)
                         ]);
                     }
 
-                    if($update < 1 && request('even_create_user_stats', false) === 'yes'){
-                        UserRoundStats::create([
-                            'user_id'    => $user_id,
-                            'round_id'   => request('round_id'),
-                            'won'        => true,
-                            'won_amount' => $winner->amount
-                        ]);
+                    if($update < 1){
+                        if(request('even_create_user_stats', false) === 'yes'){
+                            UserRoundStats::create([
+                                'user_id'    => $user_id,
+                                'round_id'   => request('round_id'),
+                                'won'        => true,
+                                'won_amount' => $winner->amount
+                            ]);
 
-                        $ticket->won = true;
-                        $ticket->won_amount = $winner->amount;
-                        $ticket->save();
+                            $ticket->won = true;
+                            $ticket->won_amount = $winner->amount;
+                            $ticket->save();
+                        }else{
+                            flash("Skipping as user stats row doesn't exist for ticket owner of: {$winner->ticket}")->warning();
+                            continue;
+                        }
                     }else{
-                        flash("Skipping as user stats row doesn't exist for ticket owner of: {$winner->ticket}")->warning();
-                        continue;
-                    }
-
-                    if($update > 0){
                         $ticket->won = true;
                         $ticket->won_amount = $winner->amount;
                         $ticket->save();
@@ -476,7 +519,13 @@ class AdminController extends Controller
 
     public function list_winners()
     {
-        $winners = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('user_round_stats.won', 1)->orderBy('user_round_stats.round_id', 'desc')->orderBy('user_round_stats.won_amount', 'desc')->get();
+        $winners = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('user_round_stats.won', 1);
+
+        if(request('round_id') && is_numeric(request('round_id'))){
+            $winners = $winners->where('round_id', request('round_id'));
+        }
+
+        $winners = $winners->orderBy('user_round_stats.round_id', 'desc')->orderBy('user_round_stats.won_amount', 'desc')->get();
 
         if(request('json', false)){
             return $winners;
@@ -531,5 +580,284 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.dashboard.list_winners');
+    }
+
+    public function test_winning_tickets()
+    {
+        return view('admin.test_winning_tickets');
+    }
+
+    public function test_winning_tickets_action()
+    {
+        request()->validate([
+            'winners' => ['required','json']
+        ]);
+
+        $posted_tickets = [];
+
+        foreach(json_decode(request('winners')) as $winner){
+            if(isset($winner->amount)){
+                $win_amount = $winner->amount;
+            }
+            $posted_tickets[] = $winner->ticket;
+        }
+
+        $get_users = UserRoundTicket::join('users','user_round_tickets.user_id','users.id')->whereIn('user_round_tickets.ticket', $posted_tickets)->orderBy('user_round_tickets.user_id','asc')->get();
+
+        if($get_users->isEmpty()){
+            return 'No Results Found!';
+        }
+
+        $i = 0;
+        $tickets = [];
+        $duplicate_winners = [];
+        foreach($get_users as $ticket)
+        {
+            $is_duplicate = false;
+            // Check for duplicate
+            foreach($tickets as $t){
+                if($t['wallet_address'] == $ticket->wallet_address){
+                    $is_duplicate = $ticket->wallet_address;
+                    $duplicate_winners[] = $ticket->wallet_address;
+                }
+            }
+
+            // Exclude Duplicates
+            if($is_duplicate !== false && request('exclude_duplicates') === 'yes'){
+                continue;
+            }
+
+            $tickets[$i]['ticket']         = $ticket->ticket;
+            $tickets[$i]['user_id']        = $ticket->user_id;
+            $tickets[$i]['wallet_address'] = $ticket->wallet_address;
+            $tickets[$i]['referrals']      = $ticket->total_referrals;
+
+            if(isset($win_amount)){
+                $tickets[$i]['amount'] = $win_amount;
+            }
+
+            $tickets[$i]['duplicate']      = $is_duplicate;
+
+            $i++;
+        }
+
+        if(request('duplicates_only') === 'yes'){
+            return $duplicate_winners;
+        }
+
+        return $tickets;
+    }
+
+    public function find_lottery_winners()
+    {
+        $rounds = Round::select(['id','block_number','rewards'])->orderBy('id','desc')->limit('10')->get();
+
+        $round_min_max = [];
+        foreach($rounds as $round){
+            $get_min = UserRoundTicket::where('round_id', $round->id)->orderBy('ticket','asc')->first();
+            $get_max = UserRoundTicket::where('round_id', $round->id)->orderBy('ticket','desc')->first();
+
+            if($get_min && $get_max){
+                $round_min_max[$round->id]['min'] = $get_min->ticket;
+                $round_min_max[$round->id]['max'] = $get_max->ticket;
+            }
+        }
+
+        return view('admin.find_lottery_winners', compact('rounds','round_min_max'));
+    }
+
+    public function find_lottery_winners_action()
+    {
+        request()->validate([
+            'round_id' => ['required','integer','exists:rounds,id'],
+            'min'      => ['required','integer','exists:user_round_tickets,ticket'],
+            'max'      => ['required','integer','exists:user_round_tickets,ticket'],
+            'hash'     => ['required','min:64','max:66']
+        ]);
+
+        $block_hash = str_replace('0x','', request('hash')); // This is determined after the predetermined block number is mined
+
+        $min_ticket_number = request('min'); // The exact value is determined at the end of each round
+        $max_ticket_number = request('max'); // The exact value is determined at the end of each round
+
+        $total_tickets = $max_ticket_number - $min_ticket_number;
+
+        $first_winning_hash   = hexdec(substr($block_hash, 0, 4));
+        $second_winning_hash = hexdec(substr($block_hash, 4, 4));
+        $third_winning_hash  = hexdec(substr($block_hash, 8, 4));
+
+        $winning_tickets[] = $min_ticket_number + intval($first_winning_hash * ($total_tickets / 65535));
+        $winning_tickets[] = $min_ticket_number + intval($second_winning_hash * ($total_tickets / 65535));
+        $winning_tickets[] = $min_ticket_number + intval($third_winning_hash * ($total_tickets / 65535));
+
+        $rank = 0;
+        foreach($winning_tickets as $key => $ticket){
+            $user = UserRoundTicket::join('users','user_round_tickets.user_id','users.id')
+                ->where('user_round_tickets.ticket', $ticket)
+                ->first();
+
+            if( ! $user){
+                return "User for Ticket not Found: {$ticket}";
+            }
+
+            $rank++;
+
+            $tickets[$rank]['ticket']         = $user->ticket;
+            $tickets[$rank]['user_id']        = $user->user_id;
+            $tickets[$rank]['wallet_address'] = $user->wallet_address;
+
+            if($rank === 1) $amount = 350;
+            if($rank === 2) $amount = 75;
+            if($rank === 3) $amount = 75;
+
+            $tickets[$rank]['amount']         = $amount;
+        }
+
+        return $tickets;
+    }
+
+    public function find_winners()
+    {
+        $rounds = Round::select(['id','block_number','rewards'])->orderBy('id','desc')->limit('10')->get();
+
+        $round_min_max = [];
+        foreach($rounds as $round){
+            $get_min = UserRoundTicket::where('round_id', $round->id)->orderBy('ticket','asc')->first();
+            $get_max = UserRoundTicket::where('round_id', $round->id)->orderBy('ticket','desc')->first();
+
+            if($get_min && $get_max){
+                $round_min_max[$round->id]['min'] = $get_min->ticket;
+                $round_min_max[$round->id]['max'] = $get_max->ticket;
+            }
+        }
+
+        return view('admin.find_winners', compact('rounds','round_min_max'));
+    }
+
+    public function find_winners_action()
+    {
+        request()->validate([
+            'round_id' => ['required','integer','exists:rounds,id'],
+            'min'      => ['required','integer','exists:user_round_tickets,ticket'],
+            'max'      => ['required','integer','exists:user_round_tickets,ticket'],
+            'hash'     => ['required','min:64','max:66'],
+            'amount'   => ['required','integer','min:40'],
+            'sort_by'  => ['required','string','in:user_id,ticket']
+        ]);
+
+        $block_hash = request('hash'); // This is determined after the predetermined block number is mined
+
+        $min_ticket_number = request('min'); // The exact value is determined at the end of each round
+        $max_ticket_number = request('max'); // The exact value is determined at the end of each round
+
+        $total_winners = 500;
+
+        $block_hash_first_char = substr(str_replace('0x','', $block_hash), 0, 1);
+
+        $total_tickets = $max_ticket_number - $min_ticket_number;
+        $step = intval($total_tickets / $total_winners);
+
+        $hash_number = hexdec($block_hash_first_char) + 1;
+
+        $multiplier = $step - $hash_number;
+
+        $n = 0;
+        $winners = [];
+        do{
+            $n++;
+            $winner = $min_ticket_number + ($n * $multiplier);
+
+            if($winner <= $max_ticket_number){
+                $winners[] = $winner;
+            }
+        }while($winner < $max_ticket_number);
+
+        $get_users = UserRoundTicket::join('users','user_round_tickets.user_id','users.id')->whereIn('user_round_tickets.ticket', $winners)->orderBy('user_round_tickets.'.request('sort_by'),'asc')->get();
+
+        if($get_users->isEmpty()){
+            return 'No Results Found!';
+        }
+
+        $i = 0;
+        $tickets = [];
+        foreach($get_users as $ticket)
+        {
+            $is_duplicate = false;
+            // Check for duplicate
+            foreach($tickets as $t){
+                if($t['wallet_address'] == $ticket->wallet_address){
+                    $is_duplicate = $ticket->wallet_address;
+                }
+            }
+
+            // Exclude Duplicates
+            if($is_duplicate !== false && request('exclude_duplicates') === 'yes'){
+                continue;
+            }
+
+            $tickets[$i]['ticket']         = $ticket->ticket;
+            $tickets[$i]['user_id']        = $ticket->user_id;
+            $tickets[$i]['wallet_address'] = $ticket->wallet_address;
+            $tickets[$i]['amount']         = request('amount');
+
+            $i++;
+        }
+
+        return $tickets;
+    }
+
+    public function top_referrers()
+    {
+        $round_stats = UserRoundStats::join('users','user_round_stats.user_id','users.id');
+
+        $filter_round_id = (int)request('round_id', request('export_for_round', false));
+
+        if($filter_round_id && is_int($filter_round_id) && $filter_round_id > 0){
+            $round_stats = $round_stats->where('user_round_stats.round_id', $filter_round_id);
+        }
+
+        $round_stats = $round_stats->where('user_round_stats.referrals','>','1')->orderBy('user_round_stats.referrals','desc');
+
+        // Export
+        if(request('export_for_round')){
+            $round_stats = $round_stats->limit(7)->get();
+
+            if($round_stats->isEmpty()){
+                return 'Empty!';
+            }
+
+            $rank = 0;
+            $tickets = [];
+            foreach($round_stats as $stat){
+                $ticket = UserRoundTicket::join('users','users.id','user_round_tickets.user_id')->where('user_id', $stat->user_id)
+                    ->where('round_id', $stat->round_id)
+                    ->where('type', 'referral')
+                    ->orderBy('ticket', 'desc')
+                    ->first();
+
+                if( ! $ticket){
+                    return "Error for user ID {$stat->user_id}";
+                }
+
+                $rank++;
+                $tickets[$rank]['ticket']         = $ticket->ticket;
+                $tickets[$rank]['user_id']        = $ticket->user_id;
+                $tickets[$rank]['wallet_address'] = $ticket->wallet_address;
+                // Amount by Rank
+                $amount = null;
+                if($rank === 1) $amount = 1200;
+                if($rank === 2) $amount = 800;
+                if($rank >= 3)  $amount = 200;
+                $tickets[$rank]['amount'] = $amount;
+            }
+
+            return $tickets;
+        }
+        else
+        {
+            $round_stats = $round_stats->paginate(10);
+        }
+
+        return view('admin.top_referrers', compact('round_stats'));
     }
 }

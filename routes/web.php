@@ -65,6 +65,8 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     Route::get('/users/login_as/{user_id}', [AdminController::class, 'login_as_user'])->name('login_as_user')->where(['user_id' => '[0-9]+']);
     Route::get('/users/change_password/{user_id}', [AdminController::class, 'change_user_password'])->name('change_user_password')->where(['user_id' => '[0-9]+']);
     Route::patch('/users/change_password/{user_id}', [AdminController::class, 'change_user_password_store'])->name('change_user_password_store')->where(['user_id' => '[0-9]+']);
+    // Top Referrers
+    Route::get('/top_referrers', [AdminController::class, 'top_referrers'])->name('top_referrers');
     // Export Tickets
     Route::get('/export_tickets', [AdminController::class, 'export_tickets'])->name('export_tickets');
     Route::post('/export_tickets/generate', [AdminController::class, 'export_tickets_generate'])->name('export_tickets.generate');
@@ -76,11 +78,21 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     Route::post('/batch_approval', [AdminController::class, 'batch_approval_action'])->name('batch_approval.action');
     // Tickets
     Route::get('/tickets', [AdminController::class, 'tickets'])->name('tickets');
+    Route::post('/tickets/action', [AdminController::class, 'tickets_action'])->name('tickets.action');
     // Rounds Resource Controller
     Route::resource('rounds', AdminRoundsController::class);
     Route::patch('/rounds/activate/{round}', [AdminRoundsController::class, 'activate'])->name('rounds.activate');
     // Round Tasks Resource Controller
     Route::resource('rounds.tasks', AdminTasksController::class);
+    // Find Winning Tickets
+    Route::get('/find_winners', [AdminController::class, 'find_winners'])->name('find_winners');
+    Route::post('/find_winners', [AdminController::class, 'find_winners_action'])->name('find_winners.action');
+    // Find Lottery Winners
+    Route::get('/find_lottery_winners', [AdminController::class, 'find_lottery_winners'])->name('find_lottery_winners');
+    Route::post('/find_lottery_winners', [AdminController::class, 'find_lottery_winners_action'])->name('find_lottery_winners.action');
+    // Test Winning Tickets
+    Route::get('/test_winning_tickets', [AdminController::class, 'test_winning_tickets'])->name('test_winning_tickets');
+    Route::post('/test_winning_tickets', [AdminController::class, 'test_winning_tickets_action'])->name('test_winning_tickets.action');
     // Winners
     Route::get('/list_winners', [AdminController::class, 'list_winners'])->name('list_winners');
     Route::post('/roll_back_a_winner', [AdminController::class, 'roll_back_a_winner'])->name('roll_back_a_winner');

@@ -16,6 +16,9 @@
                     <a class="nav-link @if($current_route === 'pages.index') active @endif" href="{{ route('pages.index') }}">Home</a>
                 </li>
                 <li class="nav-item px-md-3">
+                    <a class="nav-link @if($current_route === 'pages.winners') active @endif" href="{{ route('pages.winners') }}">Winners</a>
+                </li>
+                <li class="nav-item px-md-3">
                     <a class="nav-link @if($current_route === 'pages.faq') active @endif" href="{{ route('pages.faq') }}">FAQ</a>
                 </li>
                 <li class="nav-item px-md-3">

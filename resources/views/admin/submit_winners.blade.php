@@ -25,15 +25,11 @@
         </div>
         <div class="mb-3">
             <input type="checkbox" value="yes" name="override_40_limit" id="override_40_limit">
-            <label for="override_40_limit" class="form-label">Override 40 WQT limit (used for submitting Lottery and Referral Winners)</label>
+            <label for="override_40_limit" class="form-label">Override 40 WQT limit (used for <strong>submitting Lottery and Referral Winners</strong>)</label>
         </div>
         <div class="mb-3">
             <input type="checkbox" value="yes" name="override_user_stats" id="override_user_stats">
             <label for="override_user_stats" class="form-label">Override User Stats - If not checked, users that have won anything else on this round will be skipped.</label>
-        </div>
-        <div class="mb-3">
-            <input type="checkbox" value="yes" name="even_create_user_stats" id="even_create_user_stats">
-            <label for="even_create_user_stats" class="form-label">Create User Stats Row if doesn't exist - Warning, only use if absolutely necessary</label>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

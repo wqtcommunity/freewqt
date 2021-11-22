@@ -46,6 +46,15 @@ class DashboardController extends Controller
 
     public function submit_task($task_id, $round_id)
     {
+        // Retrieve current round from Cache/DB
+        $current_round = $this->current_round_data();
+
+        // Do not allow previous round's tasks after a new round is live
+        if($current_round['id'] > $round_id){
+            flash('Sorry, that round has ended! you cannot submit tasks for it.')->error();
+            return redirect()->route('dashboard.tasks');
+        }
+
         $task = Task::where('id', $task_id)->where('round_id', $round_id)->first();
         if( ! $task) abort(404);
 
