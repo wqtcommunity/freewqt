@@ -64,7 +64,7 @@
             </li>
         </ul>
         <div style="background:#FFF;" class="tab-content p-3 border-1 border-top-0 border table-responsive" id="winnersTabContent">
-            @if(request('round', 1) == 1)
+            @if($winners !== false)
                 <div class="tab-pane fade show active" id="round1">
                     <ul class="nav nav-pills justify-content-center" id="roundTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -73,9 +73,11 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" aria-current="page" id="lottery_winners_tab" data-bs-toggle="tab" data-bs-target="#lottery_winners" type="button" role="tab" aria-controls="lottery_winners" aria-selected="true">Lottery Winners</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" aria-current="page" id="top_referrers_tab" data-bs-toggle="tab" data-bs-target="#top_referrers" type="button" role="tab" aria-controls="top_referrers" aria-selected="true">Top Referrers</button>
-                        </li>
+                        @if(isset($winners['top_referrers']))
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" aria-current="page" id="top_referrers_tab" data-bs-toggle="tab" data-bs-target="#top_referrers" type="button" role="tab" aria-controls="top_referrers" aria-selected="true">Top Referrers</button>
+                            </li>
+                        @endif
                     </ul>
                     <div class="tab-content" id="roundTabContent">
                         <div class="tab-pane fade show active" id="airdrop_winners" role="tabpanel" aria-labelledby="airdrop_winners">
@@ -88,21 +90,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>1512125</td>
-                                    <td>0xF3749337F1c28487a7D4359b4C2E304B49c6593e</td>
-                                    <td>40 WQT</td>
-                                </tr>
-                                <tr>
-                                    <td>1512125</td>
-                                    <td>0xF3749337F1c28487a7D4359b4C2E304B49c6593e</td>
-                                    <td>40 WQT</td>
-                                </tr>
-                                <tr>
-                                    <td>1512125</td>
-                                    <td>0xF3749337F1c28487a7D4359b4C2E304B49c6593e</td>
-                                    <td>40 WQT</td>
-                                </tr>
+                                @foreach($winners['airdrop'] as $winner)
+                                    <tr>
+                                        <td>{{ $winner->ticket }}</td>
+                                        <td>{{ $winner->wallet_address }}</td>
+                                        <td>{{ intval($winner->won_amount) }} WQT</td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -113,51 +107,47 @@
                                     <th>Ticket #</th>
                                     <th>Wallet Address</th>
                                     <th>Amount</th>
-                                    <th>Description</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($winners['lottery'] as $winner)
+                                        <tr>
+                                            <td>{{ $winner->ticket }}</td>
+                                            <td>{{ $winner->wallet_address }}</td>
+                                            <td>{{ intval($winner->won_amount) }} WQT</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @if($winners['top_referrers'])
+                            <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
+                                <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users.</div>
+                                <table id="top_referrers_table" class="table table-borderless table-striped">
+                                    <thead>
                                     <tr>
-                                        <td>1</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <th>Wallet Address</th>
+                                        <th>Total Referrals</th>
+                                        <th>Amount</th>
                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
-                            <table id="top_referrers_table" class="table table-borderless table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Wallet Address</th>
-                                    <th>Total Referrals</th>
-                                    <th>Amount</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($winners['top_referrers'] as $winner)
+                                            <tr>
+                                                <td>{{ $winner->wallet_address }}</td>
+                                                <td>{{ $winners['referrer_stats'][$winner->user_id] ?? '' }}</td>
+                                                <td>{{ intval($winner->won_amount) }} WQT</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
-            @endif
-
-            @if(request('round', 1) == 2)
-                <div class="tab-pane fade show active" id="round2">Live Now! <a href="{{ route('login') }}">Login and complete the tasks to participate!</a></div>
-            @endif
-
-            @if(request('round', 1) == 3)
-                <div class="tab-pane fade show active" id="round3">Will go live after round 2 finishes</div>
-            @endif
-
-            @if(request('round', 1) == 4)
-                 <div class="tab-pane fade show active" id="round4">Will go live after round 3 finishes</div>
+                <div class="alert alert-info text-center my-2">Duplicate winners are excluded above, but we will add more winners on the last round to make sure total AirDrop winners are 2000, as promised.</div>
+            @else
+                <div class="tab-pane fade show active" id="round{{ $round_id }}">Results will be shared ~24 hours after the round completes! @if($current_round_id < 4) <br> <a href="{{ route('login') }}">You can login and complete the tasks to participate in the current round!</a> @endif </div>
             @endif
         </div>
     </div>
@@ -167,9 +157,11 @@
     @section('scripts')
     <script>
         $(document).ready( function () {
-            $('#airdrop_winners_table').DataTable();
-            $('#lottery_winners_table').DataTable();
-            $('#top_referrers_table').DataTable();
+            $('#airdrop_winners_table').DataTable({"order": [],"pageLength": 50});
+            $('#lottery_winners_table').DataTable({"order": []});
+            $('#top_referrers_table').DataTable({"order": [1, 'desc']});
+
+            $("#airdrop_winners_table_info").append("<br><small>(Duplicate winners excluded)</small>");
         });
     </script>
     @endsection

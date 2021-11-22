@@ -127,7 +127,7 @@ class DashboardController extends Controller
         if($previous_round_id > 0){
             $get_previous_round = Round::where('id', $previous_round_id)->first();
             if($get_previous_round){
-                $remaining_seconds = ($get_previous_round->estimated_block_time + 97210) - time();
+                $remaining_seconds = ($get_previous_round->estimated_block_time + 99210) - time();
                 $remaining_hours = floor($remaining_seconds / 3600);
             }
         }
