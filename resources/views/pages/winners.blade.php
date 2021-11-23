@@ -122,7 +122,6 @@
                         </div>
                         @if(isset($winners['top_referrers'], $winners['referrer_stats']))
                             <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
-                                <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users.</div>
                                 <table id="top_referrers_table" class="table table-borderless table-striped">
                                     <thead>
                                     <tr>
