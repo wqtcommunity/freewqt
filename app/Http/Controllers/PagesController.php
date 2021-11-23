@@ -51,7 +51,7 @@ class PagesController extends Controller
         $winners = false;
         $referrer_stats = [];
         if(($round_id !== $current_round_id && $round_id <= 4) || ($current_round_id === 4 && date('Ymd') > 20211213)){
-            $winners = Cache::remember('round_winners_'.$round_id, 180, function () use ($round_id) {
+            $winners = Cache::remember('round_winners_'.$round_id, 300, function () use ($round_id) {
                 $winners['airdrop'] = UserRoundTicket::select(['user_round_tickets.ticket','user_round_tickets.type','user_round_tickets.won_amount','users.wallet_address'])
                     ->join('users','users.id','user_round_tickets.user_id')
                     ->where('round_id', $round_id)
