@@ -69,28 +69,32 @@ class PagesController extends Controller
                         ->limit(3)
                         ->get();
 
-                    /*
-                    $winners['top_referrers'] = UserRoundTicket::select(['user_round_tickets.user_id', 'user_round_tickets.ticket', 'user_round_tickets.type', 'user_round_tickets.won_amount', 'users.wallet_address'])
-                        ->join('users', 'users.id', 'user_round_tickets.user_id')
-                        ->where('round_id', $round_id)
-                        ->where('won', 1)
-                        ->whereIn('won_amount', ['1200.00', '800.00', '200.00'])
-                        ->orderBy('won_amount', 'desc')
-                        ->limit(7)
-                        ->get();
+                    if($round_id === 4){
+                        $winners['top_referrers'] = UserRoundTicket::select(['user_round_tickets.user_id', 'user_round_tickets.ticket', 'user_round_tickets.type', 'user_round_tickets.won_amount', 'users.wallet_address'])
+                            ->join('users', 'users.id', 'user_round_tickets.user_id')
+                            ->where('round_id', $round_id)
+                            ->where('won', 1)
+                            ->whereIn('won_amount', ['1200.00', '800.00', '200.00'])
+                            ->orderBy('won_amount', 'desc')
+                            ->limit(7)
+                            ->get();
 
-                    $top_referrers = [];
-                    foreach ($winners['top_referrers'] as $top) {
-                        $top_referrers[] = $top->user_id;
+                        if($winners['top_referrers']->isEmpty()){
+                            unset($winners['top_referrers']);
+                        }else{
+                            $top_referrers = [];
+                            foreach ($winners['top_referrers'] as $top) {
+                                $top_referrers[] = $top->user_id;
+                            }
+                            $get_referrer_stats = UserRoundStats::where('round_id', $round_id)
+                                ->whereIn('user_id', $top_referrers)
+                                ->get();
+                            $winners['referrer_stats'] = [];
+                            foreach ($get_referrer_stats as $ref_stat) {
+                                $winners['referrer_stats'][$ref_stat->user_id] = $ref_stat->referrals;
+                            }
+                        }
                     }
-                    $get_referrer_stats = UserRoundStats::where('round_id', $round_id)
-                        ->whereIn('user_id', $top_referrers)
-                        ->get();
-                    $winners['referrer_stats'] = [];
-                    foreach ($get_referrer_stats as $ref_stat) {
-                        $winners['referrer_stats'][$ref_stat->user_id] = $ref_stat->referrals;
-                    }
-                    */
                 }else{
                     $winners = false;
                 }

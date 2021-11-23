@@ -43,7 +43,6 @@
 
 @section('content')
     @include('pages.includes._nav')
-
     <div class="container">
         <section class="mt-5 mb-3 py-2">
             <h2 class="text-center">WQT AirDrop <strong class="text-info">Winners</strong></h2>
@@ -73,7 +72,7 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" aria-current="page" id="lottery_winners_tab" data-bs-toggle="tab" data-bs-target="#lottery_winners" type="button" role="tab" aria-controls="lottery_winners" aria-selected="true">Lottery Winners</button>
                         </li>
-                        @if(isset($winners['top_referrers']))
+                        @if(isset($winners['top_referrers'], $winners['referrer_stats']))
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" aria-current="page" id="top_referrers_tab" data-bs-toggle="tab" data-bs-target="#top_referrers" type="button" role="tab" aria-controls="top_referrers" aria-selected="true">Top Referrers</button>
                             </li>
@@ -81,6 +80,7 @@
                     </ul>
                     <div class="tab-content" id="roundTabContent">
                         <div class="tab-pane fade show active" id="airdrop_winners" role="tabpanel" aria-labelledby="airdrop_winners">
+                            <div class="alert alert-info text-center my-2">Important: Some of the users that had provided invalid data in task input or undo their tasks (e.g. they didn't actually retweet or they undid it) are excluded from the list below, as well as duplicate winners as each user can only win one AirDrop each round (you can win up to 4 times but in 4 rounds).</div>
                             <table id="airdrop_winners_table" class="table table-borderless table-striped table-responsive">
                                 <thead>
                                 <tr>
@@ -120,7 +120,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if($winners['top_referrers'])
+                        @if(isset($winners['top_referrers'], $winners['referrer_stats']))
                             <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
                                 <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users.</div>
                                 <table id="top_referrers_table" class="table table-borderless table-striped">
@@ -145,7 +145,6 @@
                         @endif
                     </div>
                 </div>
-                <div class="alert alert-info text-center my-2">Duplicate winners are excluded above, but we will add more winners on the last round to make sure total AirDrop winners are 2000, as promised.</div>
             @else
                 <div class="tab-pane fade show active" id="round{{ $round_id }}">Results will be shared ~24 hours after the round completes! @if($current_round_id < 4) <br> <a href="{{ route('login') }}">You can login and complete the tasks to participate in the current round!</a> @endif </div>
             @endif
@@ -160,8 +159,6 @@
             $('#airdrop_winners_table').DataTable({"order": [],"pageLength": 50});
             $('#lottery_winners_table').DataTable({"order": []});
             $('#top_referrers_table').DataTable({"order": [1, 'desc']});
-
-            $("#airdrop_winners_table_info").append("<br><small>(Duplicate winners excluded)</small>");
         });
     </script>
     @endsection
