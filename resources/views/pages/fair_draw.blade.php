@@ -22,8 +22,8 @@
 
                     <code>$block_hash = 'BLOCK_HASH'; // This is determined after the predetermined block number is mined<br><br>
 
-$min_ticket_number = 49850000; // The exact value is determined at the end of each round<br>
-$max_ticket_number = 50150000; // The exact value is determined at the end of each round<br><br>
+$min_ticket_number = 49764533; // The exact value is determined at the end of each round. Update: For Round 1 it was 49764533<br>
+$max_ticket_number = 50235479; // The exact value is determined at the end of each round. Update: For Round 1 it was 50235479<br><br>
 
 $total_winners = 500;<br><br>
 
