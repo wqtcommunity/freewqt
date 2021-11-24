@@ -181,7 +181,7 @@
                                     <li>Manual selection</li>
                                     <li class="ev">Selected by WorkQuest’s Team (top three)</li>
                                 </ul>
-                                <a href="{{ route('pages.meme.guide', 'telegram') }}" class="btn btn-sm btn-primary">GIFs &amp; Videos Guide</a>
+                                <a href="{{ route('pages.meme.guide', 'gifs_videos') }}" class="btn btn-sm btn-primary">GIFs &amp; Videos Guide</a>
                             </div>
                         </div>
                         <hr>
