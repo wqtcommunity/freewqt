@@ -16,6 +16,9 @@
                     <a class="nav-link @if($current_route === 'pages.index') active @endif" href="{{ route('pages.index') }}">Home</a>
                 </li>
                 <li class="nav-item px-md-3">
+                    <a class="text-primary nav-link @if($current_route === 'pages.meme') active @endif" href="{{ route('pages.meme') }}">Meme Contest</a>
+                </li>
+                <li class="nav-item px-md-3">
                     <a class="animate__animated animate__heartBeat animate__delay-1s nav-link @if($current_route === 'pages.winners') active @endif" href="{{ route('pages.winners') }}">Winners</a>
                 </li>
                 <li class="nav-item px-md-3">

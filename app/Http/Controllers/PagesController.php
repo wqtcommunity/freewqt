@@ -69,30 +69,28 @@ class PagesController extends Controller
                         ->limit(3)
                         ->get();
 
-                    if($round_id === 4){
-                        $winners['top_referrers'] = UserRoundTicket::select(['user_round_tickets.user_id', 'user_round_tickets.ticket', 'user_round_tickets.type', 'user_round_tickets.won_amount', 'users.wallet_address'])
-                            ->join('users', 'users.id', 'user_round_tickets.user_id')
-                            ->where('round_id', $round_id)
-                            ->where('won', 1)
-                            ->whereIn('won_amount', ['1200.00', '800.00', '200.00'])
-                            ->orderBy('won_amount', 'desc')
-                            ->limit(7)
-                            ->get();
+                    $winners['top_referrers'] = UserRoundTicket::select(['user_round_tickets.user_id', 'user_round_tickets.ticket', 'user_round_tickets.type', 'user_round_tickets.won_amount', 'users.wallet_address'])
+                        ->join('users', 'users.id', 'user_round_tickets.user_id')
+                        ->where('round_id', $round_id)
+                        ->where('won', 1)
+                        ->whereIn('won_amount', ['1200.00', '800.00', '200.00'])
+                        ->orderBy('won_amount', 'desc')
+                        ->limit(7)
+                        ->get();
 
-                        if($winners['top_referrers']->isEmpty()){
-                            unset($winners['top_referrers']);
-                        }else{
-                            $top_referrers = [];
-                            foreach ($winners['top_referrers'] as $top) {
-                                $top_referrers[] = $top->user_id;
-                            }
-                            $get_referrer_stats = UserRoundStats::where('round_id', $round_id)
-                                ->whereIn('user_id', $top_referrers)
-                                ->get();
-                            $winners['referrer_stats'] = [];
-                            foreach ($get_referrer_stats as $ref_stat) {
-                                $winners['referrer_stats'][$ref_stat->user_id] = $ref_stat->referrals;
-                            }
+                    if($winners['top_referrers']->isEmpty()){
+                        unset($winners['top_referrers']);
+                    }else{
+                        $top_referrers = [];
+                        foreach ($winners['top_referrers'] as $top) {
+                            $top_referrers[] = $top->user_id;
+                        }
+                        $get_referrer_stats = UserRoundStats::where('round_id', $round_id)
+                            ->whereIn('user_id', $top_referrers)
+                            ->get();
+                        $winners['referrer_stats'] = [];
+                        foreach ($get_referrer_stats as $ref_stat) {
+                            $winners['referrer_stats'][$ref_stat->user_id] = $ref_stat->referrals;
                         }
                     }
                 }else{
@@ -114,5 +112,22 @@ class PagesController extends Controller
         $tickets['mid'] = '5' . str_repeat('0', config('custom.tickets.length') - 1);
 
         return view('pages.fair_draw', compact('tickets'));
+    }
+
+    public function meme()
+    {
+        $guide = false;
+        return view('pages.meme', compact('guide'));
+    }
+
+    public function meme_guide($guide)
+    {
+        if( ! in_array($guide, ['telegram','twitter','gifs_videos','gift_videos'])){
+            abort(404);
+        }
+
+        if($guide === 'gift_videos') $guide = 'gifs_videos';
+
+        return view('pages.meme', compact('guide'));
     }
 }

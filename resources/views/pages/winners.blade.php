@@ -62,7 +62,7 @@
                 <a class="nav-link @if(request('round', 1) == 4) active @endif" id="round4-tab" href="{{ route('pages.winners',['round' => 4]) }}">Round #4</a>
             </li>
         </ul>
-        <div style="background:#FFF;" class="tab-content p-3 border-1 border-top-0 border table-responsive" id="winnersTabContent">
+        <div style="background:#FFF;" class="tab-content p-3 border-1 border-top-0 border" id="winnersTabContent">
             @if($winners !== false)
                 <div class="tab-pane fade show active" id="round1">
                     <ul class="nav nav-pills justify-content-center" id="roundTab" role="tablist">
@@ -122,11 +122,12 @@
                         </div>
                         @if(isset($winners['top_referrers'], $winners['referrer_stats']))
                             <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
+                                <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought for <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users.</div>
                                 <table id="top_referrers_table" class="table table-borderless table-striped">
                                     <thead>
                                     <tr>
                                         <th>Wallet Address</th>
-                                        <th>Total Referrals</th>
+                                        <th>Total Referrals<br><small>(Round {{ $round_id }})</small></th>
                                         <th>Amount</th>
                                     </tr>
                                     </thead>

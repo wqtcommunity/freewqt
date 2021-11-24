@@ -35,6 +35,9 @@ Route::name('pages.')->group(function () {
     Route::get('/faq', [PagesController::class, 'faq'])->name('faq');
     Route::get('/winners', [PagesController::class, 'winners'])->name('winners');
     Route::get('/fair_draw', [PagesController::class, 'fair_draw'])->name('fair_draw');
+    // Meme Contest
+    Route::get('/meme', [PagesController::class, 'meme'])->name('meme');
+    Route::get('/meme/guide/{guide}', [PagesController::class, 'meme_guide'])->name('meme.guide');
 });
 
 // Dashboard
