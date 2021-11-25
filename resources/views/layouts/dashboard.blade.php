@@ -23,6 +23,15 @@
     <script src="{{ asset('assets/js/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/dataTables.responsive.min.js') }}"></script>
 
+    <style>
+        @media (max-width:768px) {
+            #meme_banner{
+                width: 200px !important;
+                height: 167px !important;
+            }
+        }
+    </style>
+
     @yield('head')
 </head>
 <body>
@@ -87,6 +96,8 @@
                         </a>
                     </li>
                 </ul>
+                <hr>
+                <a href="{{ route('pages.meme') }}" target="_blank"><img id="meme_banner" style="max-width:90%;margin:10px;margin-top:0;" src="{{ asset('assets/meme/meme_banner.png') }}"></a>
             </div>
         </nav>
 
@@ -115,6 +126,8 @@
         </main>
     </div>
 </div>
+
+
 
 <!-- Logout -->
 <form id="logout_form" method="POST" action="{{ route('logout') }}">@csrf</form>
