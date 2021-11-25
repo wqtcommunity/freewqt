@@ -105,6 +105,7 @@ class AdminController extends Controller
         request()->validate([
             'action'    => ['required', 'string', 'in:delete,update'],
             'ticket_id' => ['required', 'integer', 'exists:user_round_tickets,id'],
+            'ticket_type' => ['required', 'alpha'],
             'round_id'  => ['required', 'integer', 'exists:rounds,id'],
             'user_id'   => ['required', 'integer', 'exists:users,id'],
             'ticket'    => ['required', 'integer', 'exists:user_round_tickets,ticket'],
@@ -120,12 +121,22 @@ class AdminController extends Controller
                 ->delete();
 
             if($delete){
-                UserRoundStats::where('user_id', request('user_id'))
-                    ->where('round_id', request('round_id'))
-                    ->limit(1)
-                    ->update([
-                        'tickets' => DB::raw('tickets - 1')
-                    ]);
+                if(request('ticket_type') === 'referral'){
+                    UserRoundStats::where('user_id', request('user_id'))
+                        ->where('round_id', request('round_id'))
+                        ->limit(1)
+                        ->update([
+                            'tickets' => DB::raw('tickets - 1'),
+                            'referrals' => DB::raw('referrals - 1')
+                        ]);
+                }else{
+                    UserRoundStats::where('user_id', request('user_id'))
+                        ->where('round_id', request('round_id'))
+                        ->limit(1)
+                        ->update([
+                            'tickets' => DB::raw('tickets - 1')
+                        ]);
+                }
 
                 flash("Ticket ".request('ticket')." Deleted!")->success();
             }

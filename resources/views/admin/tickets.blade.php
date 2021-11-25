@@ -32,6 +32,7 @@
                                 @csrf
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                                <input type="hidden" name="ticket_type" value="{{ $ticket->type }}">
                                 <input type="hidden" name="round_id" value="{{ $ticket->round_id }}">
                                 <input type="hidden" name="user_id" value="{{ $ticket->user_id }}">
                                 <input type="hidden" name="ticket" value="{{ $ticket->ticket }}">
