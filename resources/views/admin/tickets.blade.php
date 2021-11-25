@@ -10,6 +10,7 @@
             <th>Round</th>
             <th>Type</th>
             <th>Ticket</th>
+            <th>Related ID</th>
             @if(request('advanced'))
                 <th>Action</th>
             @endif
@@ -23,6 +24,7 @@
                     <td>{{ $ticket->round_id }}</td>
                     <td>{{ $ticket->type }}</td>
                     <td>{{ $ticket->ticket }}</td>
+                    <td>@if($ticket->type === 'referral') <a href="{{ route('admin.dashboard.users',['search_by' => 'id','search' => $ticket->related_id]) }}">{{ $ticket->related_id }}</a> @else {{ $ticket->related_id }} @endif</td>
                     @if(request('advanced'))
                         <td>
                             <form method="POST" onsubmit="return confirm('Are you sure?');" action="{{ route('admin.dashboard.tickets.action') }}">

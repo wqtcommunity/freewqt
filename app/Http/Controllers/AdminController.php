@@ -40,21 +40,27 @@ class AdminController extends Controller
     {
         $increment_ref_id = config('custom.referrer_id_increment_by');
 
-        $tasks = false;
+        $tasks = $stats = false;
         if(request('search', false) && request('search_by', false) && in_array(request('search_by'), ['id','wallet_address','email'])){
             $users = User::where(request('search_by'), request('search'))->get();
             if($users->isNotEmpty()){
-                $tasks = UserTask::where('user_id', $users->first()->id)->orderBy('id', 'desc')->get();
+                $user_id = $users->first()->id;
+                $tasks = UserTask::where('user_id', $user_id)->orderBy('id', 'desc')->get();
+                $stats = UserRoundStats::where('user_id', $user_id)->orderBy('round_id', 'desc')->get();
 
                 if($tasks->isEmpty()){
                     $tasks = false;
+                }
+
+                if($stats->isEmpty()){
+                    $stats = false;
                 }
             }
         }else{
             $users = User::orderBy('id','desc')->paginate(20);
         }
 
-        return view('admin.users', compact('users','tasks','increment_ref_id'));
+        return view('admin.users', compact('users','tasks','increment_ref_id','stats'));
     }
 
     public function login_as_user($user_id)

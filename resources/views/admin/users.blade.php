@@ -52,6 +52,30 @@
         </form>
     @endif
 
+    @if($stats)
+        <h5 class="">Round Stats</h5>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Round ID</th>
+                <th>Tickets</th>
+                <th>Referrals</th>
+                <th>Won Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($stats as $stat)
+                <tr>
+                    <td>{{ $stat->round_id }}</td>
+                    <td>{{ $stat->tickets }}</td>
+                    <td>{{ $stat->referrals }}</td>
+                    <td>{{ $stat->won_amount ?? '-' }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @endif
+
     @if($tasks)
         <h5 class="">Submitted Tasks</h5>
         <table class="table table-bordered table-striped">
