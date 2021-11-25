@@ -21,7 +21,7 @@
         <tbody>
         @foreach($users as $user)
             <tr>
-                <td>{{ $user->id }}</td>
+                <td><a href="{{ route('admin.dashboard.users',['search_by' => 'id','search' => $user->id]) }}">{{ $user->id }}</a></td>
                 <td>{{ $user->wallet_address }}</td>
                 @if(request('search_by'))
                     <td>{{ $user->total_referrals }}</td>
