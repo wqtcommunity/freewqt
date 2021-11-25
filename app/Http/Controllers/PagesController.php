@@ -16,7 +16,7 @@ class PagesController extends Controller
         // Set Actual referrer ID
         $referrer = request('referrer', false);
         $referrer_id_increment_by = config('custom.referrer_id_increment_by');
-        if($referrer && ctype_digit($referrer) && $referrer > $referrer_id_increment_by && $referrer != '13611')
+        if($referrer && ctype_digit($referrer) && $referrer > $referrer_id_increment_by)
         {
             $actual_referrer_id = intval(bcsub("$referrer", "$referrer_id_increment_by", 0));
             session(['actual_referrer_id' => $actual_referrer_id]);

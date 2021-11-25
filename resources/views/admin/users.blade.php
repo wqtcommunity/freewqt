@@ -14,6 +14,7 @@
             @endif
             <th>Email (Optional)</th>
             <th>Invite Code</th>
+            <th>Referrer</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -27,6 +28,7 @@
                 @endif
                 <td>{{ $user->email ?? '-' }}</td>
                 <td><small>{{ $user->id + $increment_ref_id }}</small></td>
+                <td>@if($user->referrer_id)<a href="{{ route('admin.dashboard.users',['search_by' => 'id','search' => $user->referrer_id]) }}"><small>{{ $user->referrer_id }}</small></a>@endif</td>
                 <td>
                     <a class="btn btn-sm btn-primary" href="{{ route('admin.dashboard.login_as_user', $user->id) }}" onclick="return confirm('Login as this user?')">Login As</a>
                     <a class="btn btn-sm btn-secondary" href="{{ route('admin.dashboard.change_user_password', $user->id) }}" onclick="return confirm('Reset password for this user?')">Reset Password</a>
