@@ -186,7 +186,7 @@ class DashboardController extends Controller
             return true;
         }
 
-        $referrals_that_have_done_tasks = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('user_round_stats.tickets','>', 3)->where('users.referrer_id', $user_id)->orderBy('users.id','desc')->count();
+        $referrals_that_have_done_tasks = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('user_round_stats.tickets','>', 3)->where('users.referrer_id', $user_id)->count();
         $percentage = intval(($referrals_that_have_done_tasks / $user_referrals->referrals) * 100);
 
         // More than 8 referrals and less than 10% are doing their tasks!!!
