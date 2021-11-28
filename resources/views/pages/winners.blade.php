@@ -123,6 +123,9 @@
                         @if(isset($winners['top_referrers'], $winners['referrer_stats']))
                             <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
                                 <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought for <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users.</div>
+                                @if(request('round', 1) > 1)
+                                    <div class="alert alert-warning text-center my-2">From now on (after round 1) we are very strict regarding fake referrals, we check and confirm referrals and users who try to cheat with fake referrals will be excluded.</div>
+                                @endif
                                 <table id="top_referrers_table" class="table table-borderless table-striped">
                                     <thead>
                                     <tr>
@@ -141,6 +144,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @if(request('round', 1) > 1)
+                                    <div class="alert alert-secondary text-center my-2">All users who tried to win here with fake referrals are excluded, we are very strict about this because we feel that our legitimate participants should have a fair chance (at least as much as possible)!<br><br>We are doing our very best to run a fair AirDrop, please participate fairly!</div>
+                                @endif
                             </div>
                         @endif
                     </div>
