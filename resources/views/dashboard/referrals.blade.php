@@ -21,7 +21,7 @@
 
         <div class="alert alert-info my-4">Please note, for top-referrer rewards, only referrals who have <strong>correctly</strong> completed their tasks will be counted.</div>
 
-        <h6 class="my-3">Important referral rules for round {{ $round_id }}:</h6>
+        <h6 class="my-3">Important referral rules for this round (previous rounds are unaffected):</h6>
         <ul style="font-size:0.8rem;">
             <li>As we've detected some users trying to abuse our honest and fair system, from now on only if you have completed all your tasks correctly you can use your referral link (previous referrals are unaffected)</li>
             <li>To participate in Top Referrers program, only referrals that have completed all their tasks <strong>correctly</strong> will be counted (this will be applied before amount distribution).</li>

@@ -24,6 +24,9 @@
         </thead>
         <tbody>
         @foreach($user_round_stats as $round_stats)
+            @if($round_stats->round_id > 4)
+                @continue
+            @endif
             <tr>
                 <td>{{ $round_stats->round_id }}</td>
                 <td>{{ $round_stats->tickets }}</td>

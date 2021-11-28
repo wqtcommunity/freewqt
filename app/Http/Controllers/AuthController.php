@@ -38,6 +38,11 @@ class AuthController extends Controller
     {
         $page_id = 'signup';
 
+        $current_round = $this->current_round_data();
+        if($current_round['id'] > 4){
+            abort(403, 'AirDrop has ended! you cannot signup now...');
+        }
+
         $validation_rules = [
             'wallet_address' => ['required','string','alpha_num','size:42','unique:users', new ethereumValidator],
             'password'       => ['required','string','confirmed','min:8'],
