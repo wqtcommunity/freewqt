@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\RoundTrait;
 use App\Http\Traits\TicketTrait;
 use App\Models\Round;
 use App\Models\User;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    use TicketTrait;
+    use TicketTrait, RoundTrait;
 
     public function signup()
     {
@@ -60,17 +61,23 @@ class AuthController extends Controller
             abort(429, 'Your IP address has been used to create an account recently, please try again in a few days.');
         }
 
+        // Referrer?
+        $referrer_id = null;
+        $actual_referrer_id = session('actual_referrer_id', null);
+        if(isset($actual_referrer_id) && is_int($actual_referrer_id) && $actual_referrer_id > 0)
+        {
+            if(session('ref_skip_ticket', false) === true)
+            {
+                $referrer_id = $actual_referrer_id;
+            }
+            elseif($this->has_referrer_done_everything($actual_referrer_id))
+            {
+                $referrer_id = $actual_referrer_id;
+            }
+        }
+
         try {
             DB::beginTransaction();
-                // Referrer?
-                $referrer_id = null;
-                $actual_referrer_id = session('actual_referrer_id', null);
-                if(is_int($actual_referrer_id) && $actual_referrer_id >= 1){
-                    $get_referrer = User::find($actual_referrer_id);
-                    if(isset($get_referrer)){
-                        $referrer_id = $actual_referrer_id;
-                    }
-                }
 
                 // Create user
                 $user = User::create([

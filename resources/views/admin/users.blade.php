@@ -2,7 +2,7 @@
 
 @section('content')
     @if(request('search'))
-        <div class="alert alert-info">Search for {{ request('search_by') }} {{ request('search') }}</div>
+        <div class="alert alert-info">Search for {{ request('search_by') }} {{ request('search') }} @if(request('search_by') === 'id' && request('referral_stats') !== 'yes') <a href="{{ route('admin.dashboard.users',['search_by' => 'id','search' => request('search')]) }}&referral_stats=yes" class="float-end btn btn-sm btn-warning">Show Referral Stats</a> @endif</div>
     @endif
     <table class="table table-bordered table-striped">
         <thead>
@@ -54,9 +54,35 @@
         </form>
     @endif
 
+    @if($referral_stats !== false)
+        <h5 class="my-3">Referral Stats</h5>
+        <table class="table table-bordered table-striped mb-5">
+            <thead>
+            <tr>
+                <th>Referral User ID</th>
+                <th>Round ID</th>
+                <th>Wallet Address</th>
+                <th>Tickets</th>
+                <th>Referrals</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($referral_stats as $rstat)
+                <tr>
+                    <td><a href="{{ route('admin.dashboard.users',['search_by' => 'id','search' => $rstat->user_id]) }}">{{ $rstat->user_id }}</a></td>
+                    <td>{{ $rstat->round_id }}</td>
+                    <td>{{ $rstat->wallet_address }}</td>
+                    <td>{{ $rstat->tickets }}</td>
+                    <td>{{ $rstat->referrals }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @endif
+
     @if($stats)
-        <h5 class="">Round Stats</h5>
-        <table class="table table-bordered table-striped">
+        <h5 class="my-3">Round Stats</h5>
+        <table class="table table-bordered table-striped mb-5">
             <thead>
             <tr>
                 <th>Round ID</th>
@@ -79,8 +105,8 @@
     @endif
 
     @if($tasks)
-        <h5 class="">Submitted Tasks</h5>
-        <table class="table table-bordered table-striped">
+        <h5 class="my-3">Submitted Tasks</h5>
+        <table class="table table-bordered table-striped mb-5">
             <thead>
             <tr>
                 <th>Task ID</th>

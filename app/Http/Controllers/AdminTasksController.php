@@ -138,7 +138,7 @@ class AdminTasksController extends Controller
             abort(403);
         }
 
-        $tasks = Task::all();
+        $tasks = Task::whereNotIn('difficulty',['hard','extreme','other'])->get();
         $limit = (int) request('limit', 40);
 
         foreach($tasks as $task){

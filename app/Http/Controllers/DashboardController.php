@@ -16,12 +16,18 @@ class DashboardController extends Controller
 
     public function index()
     {
+        $user_id = auth()->user()->id;
+
         $incremented_ref_id = auth()->user()->id + config('custom.referrer_id_increment_by');
 
         $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
-        $user_stats = UserRoundStats::where('user_id', auth()->user()->id)->where('round_id', $last_round->id)->first();
+        $user_stats = UserRoundStats::where('user_id', $user_id)->where('round_id', $last_round->id)->first();
 
-        return view('dashboard.index', compact('last_round','user_stats','incremented_ref_id'));
+        $all_done = $this->has_referrer_done_everything($user_id);
+
+        $real_referrals = $this->check_if_real_referrals(false, $user_id);
+
+        return view('dashboard.index', compact('last_round','user_stats','incremented_ref_id','all_done','real_referrals'));
     }
 
     public function tasks()
@@ -103,9 +109,11 @@ class DashboardController extends Controller
         $last_round = Round::where('active', true)->orderBy('id', 'DESC')->first();
         $last_round_id = $last_round->id;
 
+        $real_referrals = $this->check_if_real_referrals($last_round_id);
+
         $round_tickets = UserRoundTicket::select(['round_id','ticket','type','won','won_amount','created_at'])->where('user_id', auth()->user()->id)->orderBy('round_id', 'DESC')->paginate(200);
 
-        return view('dashboard.tickets', compact('round_tickets','last_round_id'));
+        return view('dashboard.tickets', compact('round_tickets','last_round_id','real_referrals'));
     }
 
     public function current()
@@ -149,6 +157,43 @@ class DashboardController extends Controller
         $incremented_ref_id = auth()->user()->id + config('custom.referrer_id_increment_by');
         $round_stats = UserRoundStats::select(['round_id', 'referrals'])->where('user_id', auth()->user()->id)->orderBy('round_id','DESC')->get();
 
-        return view('dashboard.referrals', compact('round_stats','incremented_ref_id'));
+        $current_round_data = $this->current_round_data();
+        $round_id = $current_round_data['id'];
+
+        $all_done = $this->has_referrer_done_everything(auth()->user()->id);
+
+        $real_referrals = $this->check_if_real_referrals($round_id);
+
+        return view('dashboard.referrals', compact('round_stats','incremented_ref_id','all_done','round_id','real_referrals'));
+    }
+
+    private function check_if_real_referrals($round_id=false, $user_id=false): bool
+    {
+        if( ! $round_id){
+            $current_round_data = $this->current_round_data();
+            $round_id = $current_round_data['id'];
+        }
+
+        if( ! $user_id){
+            $user_id = auth()->user()->id;
+        }
+
+        $user_referrals = UserRoundStats::where('round_id', $round_id)
+            ->where('user_id', $user_id)->first();
+
+        // No referrals, return true
+        if( ! $user_referrals || ! isset($user_referrals->referrals) || $user_referrals->referrals < 1){
+            return true;
+        }
+
+        $referrals_that_have_done_tasks = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('user_round_stats.tickets','>', 1)->where('users.referrer_id', $user_id)->orderBy('users.id','desc')->count();
+        $percentage = intval(($referrals_that_have_done_tasks / $user_referrals->referrals) * 100);
+
+        // More than 8 referrals and less than 10% are doing their tasks!!!
+        if($user_referrals->referrals > 8 && $percentage < 10){
+            return false;
+        }
+
+        return true;
     }
 }

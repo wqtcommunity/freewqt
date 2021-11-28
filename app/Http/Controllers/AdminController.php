@@ -40,6 +40,8 @@ class AdminController extends Controller
     {
         $increment_ref_id = config('custom.referrer_id_increment_by');
 
+        $referral_stats = false;
+
         $tasks = $stats = false;
         if(request('search', false) && request('search_by', false) && in_array(request('search_by'), ['id','wallet_address','email'])){
             $users = User::where(request('search_by'), request('search'))->get();
@@ -55,12 +57,16 @@ class AdminController extends Controller
                 if($stats->isEmpty()){
                     $stats = false;
                 }
+
+                if(request('referral_stats') === 'yes'){
+                    $referral_stats = UserRoundStats::join('users','user_round_stats.user_id','users.id')->where('users.referrer_id', $user_id)->orderBy('user_round_stats.tickets','desc')->limit(100)->get();
+                }
             }
         }else{
             $users = User::orderBy('id','desc')->paginate(20);
         }
 
-        return view('admin.users', compact('users','tasks','increment_ref_id','stats'));
+        return view('admin.users', compact('users','tasks','increment_ref_id','stats','referral_stats'));
     }
 
     public function login_as_user($user_id)
