@@ -41,9 +41,10 @@ class PagesController extends Controller
 
     public function winners()
     {
-        $round_id = (int)request('round', 1);
-        if($round_id < 1 || $round_id > 4){
-            $round_id = 1;
+        $requested_round_id = request('round', 'all');
+        if(is_numeric($requested_round_id)) $requested_round_id = (int) $requested_round_id;
+        if(is_numeric($requested_round_id) && ($requested_round_id < 1 || $requested_round_id > 4)){
+            $requested_round_id = 'all';
         }
 
         // Retrieve current round from Cache/DB
@@ -51,12 +52,17 @@ class PagesController extends Controller
         $current_round_id = (int)$current_round['id'];
 
         $winners = false;
-        $referrer_stats = [];
-        if(($round_id !== $current_round_id && $round_id <= 4) || ($current_round_id === 4 && date('Ymd') > 20211213)){
-            $winners = Cache::remember('round_winners_'.$round_id, 300, function () use ($round_id) {
+
+        // Winners Count
+        $winners_count = Cache::remember('winners_count', 300, function () {
+            return UserRoundStats::where('won', 1)->count();
+        });
+
+        // Winners List
+        if($requested_round_id === 'all'){
+            $winners = Cache::remember('winners_combined', 300, function () {
                 $winners['airdrop'] = UserRoundTicket::select(['user_round_tickets.ticket','user_round_tickets.type','user_round_tickets.won_amount','users.wallet_address'])
                     ->join('users','users.id','user_round_tickets.user_id')
-                    ->where('round_id', $round_id)
                     ->where('won', 1)
                     ->where('won_amount', '40.00')
                     ->get();
@@ -64,35 +70,35 @@ class PagesController extends Controller
                 if( ! $winners['airdrop']->isEmpty()) {
                     $winners['lottery'] = UserRoundTicket::select(['user_round_tickets.ticket', 'user_round_tickets.type', 'user_round_tickets.won_amount', 'users.wallet_address'])
                         ->join('users', 'users.id', 'user_round_tickets.user_id')
-                        ->where('round_id', $round_id)
                         ->where('won', 1)
                         ->whereIn('won_amount', ['350.00', '75.00'])
                         ->orderBy('won_amount', 'desc')
-                        ->limit(3)
                         ->get();
 
-                    $winners['top_referrers'] = UserRoundTicket::select(['user_round_tickets.user_id', 'user_round_tickets.ticket', 'user_round_tickets.type', 'user_round_tickets.won_amount', 'users.wallet_address'])
+                    $winners['top_referrers'] = UserRoundTicket::select(['user_round_tickets.user_id', 'user_round_tickets.round_id', 'user_round_tickets.ticket', 'user_round_tickets.type', 'user_round_tickets.won_amount', 'users.wallet_address'])
                         ->join('users', 'users.id', 'user_round_tickets.user_id')
-                        ->where('round_id', $round_id)
                         ->where('won', 1)
-                        ->whereIn('won_amount', ['1200.00', '800.00', '200.00'])
-                        ->orderBy('won_amount', 'desc')
-                        ->limit(7)
+                        ->whereIn('user_round_tickets.won_amount', ['1200.00', '800.00', '200.00'])
+                        ->orderBy('user_round_tickets.won_amount', 'desc')
                         ->get();
 
                     if($winners['top_referrers']->isEmpty()){
                         unset($winners['top_referrers']);
                     }else{
                         $top_referrers = [];
+                        $referrer_round = [];
                         foreach ($winners['top_referrers'] as $top) {
                             $top_referrers[] = $top->user_id;
+                            $referrer_round[$top->user_id] = $top->round_id;
                         }
-                        $get_referrer_stats = UserRoundStats::where('round_id', $round_id)
-                            ->whereIn('user_id', $top_referrers)
-                            ->get();
+                        $get_referrer_stats = UserRoundStats::whereIn('user_id', $top_referrers)->get();
                         $winners['referrer_stats'] = [];
                         foreach ($get_referrer_stats as $ref_stat) {
-                            $winners['referrer_stats'][$ref_stat->user_id] = $ref_stat->referrals;
+                            foreach($referrer_round as $uid => $rid){
+                                if($ref_stat->round_id == $rid){
+                                    $winners['referrer_stats'][$ref_stat->user_id] = $ref_stat->referrals;
+                                }
+                            }
                         }
                     }
                 }else{
@@ -104,7 +110,7 @@ class PagesController extends Controller
         }
 
 
-        return view('pages.winners', compact('current_round_id','round_id','winners'));
+        return view('pages.winners', compact('current_round_id','requested_round_id','winners','winners_count'));
     }
 
     public function fair_draw()

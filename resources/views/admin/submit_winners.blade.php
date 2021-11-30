@@ -8,6 +8,9 @@
             <select required class="form-select" name="round_id" id="round_id">
                 <option></option>
                 @foreach($rounds as $round)
+                    @if($round->id < ($current_round_id - 1))
+                        @continue
+                    @endif
                     <option @if(old('round_id') == $round->id) selected @endif value="{{ $round->id }}">Round {{ $round->id }} (Rewards: {{ $round->rewards }}, Block: #{{ $round->block_number }})</option>
                 @endforeach
             </select>
@@ -32,7 +35,7 @@
             <label for="override_user_stats" class="form-label">Override User Stats - If not checked, users that have won anything else on this round will be skipped.</label>
         </div>
         <div class="mb-3">
-            <input type="checkbox" value="yes" name="even_create_user_stats" id="even_create_user_stats">
+            <input type="checkbox" checked value="yes" name="even_create_user_stats" id="even_create_user_stats">
             <label for="even_create_user_stats" class="form-label">Create User Stats Row if doesn't exist - Warning, only use if absolutely necessary</label>
         </div>
 

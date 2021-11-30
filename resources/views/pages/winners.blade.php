@@ -50,17 +50,23 @@
         <ul class="nav nav-tabs position-relative" id="winnersTab">
             <span id="amount_date" class="text-end position-absolute">Amount Distribution: <strong>19th December, 2021</strong></span>
             <li class="nav-item" role="presentation">
-                <a class="nav-link @if(request('round', 1) == 1) active @endif" id="round1-tab" href="{{ route('pages.winners',['round' => 1]) }}">Round #1</a>
+                <a class="nav-link @if($requested_round_id == 'all') active @endif" id="round1-tab" href="{{ route('pages.winners',['round' => 'all']) }}">@if($winners_count < 550) Round 1 @elseif($winners_count < 1100) Round 1 &amp; 2 @elseif($winners_count < 1600) Round 1 &amp; 2 &amp; 3  @else All Round @endif Winners @if($winners_count > 550) (Combined List) @endif</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link @if(request('round', 1) == 2) active @endif" id="round2-tab" href="{{ route('pages.winners',['round' => 2]) }}">Round #2</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if(request('round', 1) == 3) active @endif" id="round3-tab" href="{{ route('pages.winners',['round' => 3]) }}">Round #3</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if(request('round', 1) == 4) active @endif" id="round4-tab" href="{{ route('pages.winners',['round' => 4]) }}">Round #4</a>
-            </li>
+            @if($winners_count < 550)
+                <li class="nav-item">
+                    <a class="nav-link @if($requested_round_id == 2) active @endif" id="round2-tab" href="{{ route('pages.winners',['round' => 2]) }}">Round #2</a>
+                </li>
+            @endif
+            @if($winners_count < 1100)
+                <li class="nav-item">
+                    <a class="nav-link @if($requested_round_id == 3) active @endif" id="round3-tab" href="{{ route('pages.winners',['round' => 3]) }}">Round #3</a>
+                </li>
+            @endif
+            @if($winners_count < 1600)
+                <li class="nav-item">
+                    <a class="nav-link @if($requested_round_id == 4) active @endif" id="round4-tab" href="{{ route('pages.winners',['round' => 4]) }}">Round #4</a>
+                </li>
+            @endif
         </ul>
         <div style="background:#FFF;" class="tab-content p-3 border-1 border-top-0 border" id="winnersTabContent">
             @if($winners !== false)
@@ -101,6 +107,7 @@
                             </table>
                         </div>
                         <div class="tab-pane fade show" id="lottery_winners" role="tabpanel" aria-labelledby="lottery_winners">
+                            <div class="alert alert-info my-3">Users who have not correctly completed their tasks are excluded.</div>
                             <table id="lottery_winners_table" class="table table-borderless table-striped">
                                 <thead>
                                 <tr>
@@ -119,40 +126,41 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            @if($winners_count >= 550)
+                                <div class="alert alert-secondary my-2">Ticket 50098322 (Address 0x0962f6b5488ee7bc62cee0c57560141bec468b35) had won but excluded from Round 2 Lottery, because of incorrect task completion and providing invalid data, we felt we should exclusively mention this because the winning ticket number was 50098322 according to our picking method.</div>
+                            @endif
                         </div>
                         @if(isset($winners['top_referrers'], $winners['referrer_stats']))
                             <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
-                                <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought for <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users.</div>
-                                @if(request('round', 1) > 1)
-                                    <div class="alert alert-warning text-center my-2">From now on (after round 1) we are very strict regarding fake referrals, we check and confirm referrals and users who try to cheat with fake referrals will be excluded.</div>
-                                @endif
+                                <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought for <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users. Note that you have to complete all your tasks for that round to activate your referral link.</div>
+                                <div class="alert alert-warning text-center my-2">From now on (after round 1) we are very strict regarding fake referrals, we check and confirm referrals and users who try to cheat with fake referrals will be excluded.</div>
                                 <table id="top_referrers_table" class="table table-borderless table-striped">
                                     <thead>
                                     <tr>
+                                        {{--<th>Round #</th>--}}
                                         <th>Wallet Address</th>
-                                        <th>Total Referrals<br><small>(Round {{ $round_id }})</small></th>
+                                        {{--<th>Total Referrals</th>--}}
                                         <th>Amount</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($winners['top_referrers'] as $winner)
                                             <tr>
+                                                {{--<td>{{ $winner->round_id }}</td>--}}
                                                 <td>{{ $winner->wallet_address }}</td>
-                                                <td>{{ $winners['referrer_stats'][$winner->user_id] ?? '' }}</td>
+                                                {{--<td>{{ $winners['referrer_stats'][$winner->user_id] ?? '' }}</td>--}}
                                                 <td>{{ intval($winner->won_amount) }} WQT</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @if(request('round', 1) > 1)
-                                    <div class="alert alert-secondary text-center my-2">All users who tried to win here with fake referrals are excluded, we are very strict about this because we feel that our legitimate participants should have a fair chance (at least as much as possible)!<br><br>We are doing our very best to run a fair AirDrop, please participate fairly!</div>
-                                @endif
+                                <div class="alert alert-secondary text-center my-2">All users who tried to win here with fake referrals are excluded, we are very strict about this because we feel that our legitimate participants should have a fair chance (at least as much as possible)!<br><br>We are doing our very best to run a fair AirDrop, please participate fairly!</div>
                             </div>
                         @endif
                     </div>
                 </div>
             @else
-                <div class="tab-pane fade show active" id="round{{ $round_id }}">Results will be shared ~24 hours after the round completes! @if($current_round_id < 4) <br> <a href="{{ route('login') }}">You can login and complete the tasks to participate in the current round!</a> @endif </div>
+                <div class="tab-pane fade show active" id="round{{ $requested_round_id }}">Results will be shared ~24 hours after the round completes! @if($current_round_id < 4) <br> <a href="{{ route('login') }}">You can login and complete the tasks to participate in the current round!</a> @endif </div>
             @endif
         </div>
     </div>
@@ -164,7 +172,7 @@
         $(document).ready( function () {
             $('#airdrop_winners_table').DataTable({"order": [],"pageLength": 50});
             $('#lottery_winners_table').DataTable({"order": []});
-            $('#top_referrers_table').DataTable({"order": [1, 'desc']});
+            $('#top_referrers_table').DataTable({"order": [],"pageLength": 50});
         });
     </script>
     @endsection

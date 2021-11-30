@@ -15,10 +15,11 @@ use App\Http\Traits\TicketTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\RoundTrait;
 
 class AdminController extends Controller
 {
-    use TicketTrait;
+    use TicketTrait,RoundTrait;
 
     public function __construct()
     {
@@ -396,7 +397,11 @@ class AdminController extends Controller
     public function submit_winners()
     {
         $rounds = Round::select(['id','block_number','rewards'])->orderBy('id','desc')->limit('10')->get();
-        return view('admin.submit_winners', compact('rounds'));
+
+        $current_round = $this->current_round_data();
+        $current_round_id = $current_round['id'];
+
+        return view('admin.submit_winners', compact('rounds','current_round_id'));
     }
 
     public function submit_winners_store()
@@ -447,15 +452,15 @@ class AdminController extends Controller
                     $user_id = (int)$ticket->user_id;
 
                     // Check User Stats
-                    if(request('override_user_stats', false) !== 'yes'){
-
+                    if(request('override_user_stats', false) !== 'yes')
+                    {
                         $get_user_stats = UserRoundStats::where('user_id', $user_id)->where('round_id',request('round_id'))->first();
                         if( ! $get_user_stats){
-                            flash("User stats not found, and override_user_stats isn't set for ticket: {$winner->ticket}")->error();
-                            continue;
-                        }
-
-                        if($get_user_stats->won || $get_user_stats->won_amount > 0){
+                            if(request('even_create_user_stats', false) !== 'yes'){
+                                flash("User stats not found, and even_create_user_stats isn't set for ticket: {$winner->ticket}")->error();
+                                continue;
+                            }
+                        }elseif($get_user_stats->won || $get_user_stats->won_amount > 0){
                             flash("User stats is already set as WON, skipping ticket: {$winner->ticket}")->error();
                             continue;
                         }
@@ -878,7 +883,7 @@ class AdminController extends Controller
         }
         else
         {
-            $round_stats = $round_stats->paginate(10);
+            $round_stats = $round_stats->paginate(25);
         }
 
         return view('admin.top_referrers', compact('round_stats'));
