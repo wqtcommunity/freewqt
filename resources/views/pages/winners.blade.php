@@ -50,7 +50,7 @@
         <ul class="nav nav-tabs position-relative" id="winnersTab">
             <span id="amount_date" class="text-end position-absolute">Amount Distribution: <strong>19th December, 2021</strong></span>
             <li class="nav-item" role="presentation">
-                <a class="nav-link @if($requested_round_id == 'all') active @endif" id="round1-tab" href="{{ route('pages.winners',['round' => 'all']) }}">@if($winners_count < 550) Round 1 @elseif($winners_count < 1100) Round 1 &amp; 2 @elseif($winners_count < 1600) Round 1 &amp; 2 &amp; 3  @else All Round @endif Winners @if($winners_count > 550) (Combined List) @endif</a>
+                <a class="nav-link @if($requested_round_id == 'all') active @endif" id="round1-tab" href="{{ route('pages.winners',['round' => 'all']) }}">@if($winners_count < 550) Round 1 @elseif($winners_count < 1100) Round 1 &amp; 2 @elseif($winners_count < 1600) Round 1 &amp; 2 &amp; 3  @else All Rounds' @endif Winners @if($winners_count > 550) (Combined List) @endif</a>
             </li>
             @if($winners_count < 550)
                 <li class="nav-item">
@@ -86,7 +86,7 @@
                     </ul>
                     <div class="tab-content" id="roundTabContent">
                         <div class="tab-pane fade show active" id="airdrop_winners" role="tabpanel" aria-labelledby="airdrop_winners">
-                            <div class="alert alert-info text-center my-2">Important: Some of the users that had provided invalid data in task input or undo their tasks (e.g. they didn't actually retweet or they undid it) are excluded from the list below, as well as duplicate winners as each user can only win one AirDrop each round (you can win up to 4 times but in 4 rounds).</div>
+                            <div class="alert alert-info text-center my-2">Important: Some users that had provided invalid data in task input or undo their tasks (e.g. they didn't actually retweet, or they undid it) are excluded from the list below, as well as duplicate winners as each user can only win one AirDrop each round (you can win up to 4 times but in 4 rounds).</div>
                             <table id="airdrop_winners_table" class="table table-borderless table-striped table-responsive">
                                 <thead>
                                 <tr>
@@ -126,13 +126,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            @if($winners_count >= 550)
-                                <div class="alert alert-secondary my-2">Ticket 50098322 (Address 0x0962f6b5488ee7bc62cee0c57560141bec468b35) had won but excluded from Round 2 Lottery, because of incorrect task completion and providing invalid data, we felt we should exclusively mention this because the winning ticket number was 50098322 according to our picking method.</div>
-                            @endif
                         </div>
                         @if(isset($winners['top_referrers'], $winners['referrer_stats']))
                             <div class="tab-pane fade show" id="top_referrers" role="tabpanel" aria-labelledby="top_referrers">
-                                <div class="alert alert-info text-center my-2">Please note that top referrers are selected based on referrals brought for <strong>each round</strong>, so the following winners will start from 0 on next round, just like other users. Note that you have to complete all your tasks for that round to activate your referral link.</div>
                                 <div class="alert alert-warning text-center my-2">From now on (after round 1) we are very strict regarding fake referrals, we check and confirm referrals and users who try to cheat with fake referrals will be excluded.</div>
                                 <table id="top_referrers_table" class="table table-borderless table-striped">
                                     <thead>

@@ -1,6 +1,7 @@
 @extends('layouts.admin_dashboard', ['page_title' => 'list_winners'])
 
 @section('content')
+    <a href="?csv=true" class="btn btn-primary btn-sm float-end">Export CSV (address,amount)</a>
     <table id="dataTable" class="table table-bordered table-striped">
         <thead>
         <tr>

@@ -60,6 +60,40 @@ The code above will generate the winning ticket numbers once the block is mined,
                     Second Winner = <code>Smallest Ticket Number + (int) hexdec(Next 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
                     Third Winner = <code>Smallest Ticket Number + (int) hexdec(Next 4 characters of Block Hash) * (Total Tickets / 65535)</code><br>
                 </p>
+                <br>
+                <strong>UPDATE (December 13, 2021): Final details to use in the code above:</strong>
+                <table class="table table-bordered my-2" style="background:#FFF;">
+                    <tr>
+                        <th>Round #</th>
+                        <th>Predetermined BSC Block (to get Block Hash)</th>
+                        <th>Ticket Minimum</th>
+                        <th>Ticket Maximum</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>12860740</td>
+                        <td>49764533</td>
+                        <td>50235479</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>13063315</td>
+                        <td>49755722</td>
+                        <td>50244294</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>13240482</td>
+                        <td>49746867</td>
+                        <td>50253232</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>13425511</td>
+                        <td>49738214</td>
+                        <td>50261899</td>
+                    </tr>
+                </table>
             </div>
         </section>
     </div>

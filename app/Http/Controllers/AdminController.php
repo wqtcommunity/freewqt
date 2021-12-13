@@ -553,11 +553,42 @@ class AdminController extends Controller
             $winners = $winners->where('round_id', request('round_id'));
         }
 
-        $winners = $winners->orderBy('user_round_stats.round_id', 'desc')->orderBy('user_round_stats.won_amount', 'desc')->get();
-
         if(request('json', false)){
             return $winners;
         }
+
+        if(request('csv') === 'true'){
+            $winners = $winners->orderBy('user_round_stats.won_amount', 'desc')->get();
+
+            $fileName = 'winners.csv';
+            $headers = array(
+                "Content-type"        => "text/csv",
+                "Content-Disposition" => "attachment; filename=$fileName",
+                "Pragma"              => "no-cache",
+                "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+                "Expires"             => "0"
+            );
+
+            $columns = array('address', 'amount');
+
+            $callback = function() use($winners, $columns) {
+                $file = fopen('php://output', 'w');
+                fputcsv($file, $columns);
+
+                foreach ($winners as $task) {
+                    $row['address'] = $task->wallet_address;
+                    $row['amount']  = $task->won_amount;
+
+                    fputcsv($file, array($row['address'], $row['amount']));
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        }
+
+        $winners = $winners->orderBy('user_round_stats.round_id', 'desc')->orderBy('user_round_stats.won_amount', 'desc')->get();
 
         return view('admin.list_winners', compact('winners'));
     }

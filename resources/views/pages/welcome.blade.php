@@ -5,7 +5,9 @@
 
     <section id="intro" class="my-5 py-2">
         <h1><strong>WorkQuest</strong> Airdrops</h1>
-        <h2>4 Separate AirDrops in 4 Rounds!<br><small>Read more <a href="https://workquest.medium.com/workquest-three-giveaway-programs-a94c30a0a84e" id="link_wq" target="_blank">here</a></small></h2>
+        @if(date('Y') < 2022)
+            <h2><small>Distribution Date (to winning addresses): 19th December 2021</small></h2>
+        @endif
     </section>
 
     <section id="countdown" class="animate__animated animate__jackInTheBox py-2 mb-5">
