@@ -99,7 +99,11 @@
                                 @foreach($winners['airdrop'] as $winner)
                                     <tr>
                                         <td>{{ $winner->ticket }}</td>
-                                        <td>{{ $winner->wallet_address }}</td>
+                                        @if(request('link_address') === 'yes')
+                                            <td><a target="_blank" href="https://bscscan.com/address/{{ $winner->wallet_address }}">{{ $winner->wallet_address }}</a></td>
+                                        @else
+                                            <td>{{ $winner->wallet_address }}</td>
+                                        @endif
                                         <td>{{ intval($winner->won_amount) }} WQT</td>
                                     </tr>
                                 @endforeach
@@ -120,7 +124,11 @@
                                     @foreach($winners['lottery'] as $winner)
                                         <tr>
                                             <td>{{ $winner->ticket }}</td>
-                                            <td>{{ $winner->wallet_address }}</td>
+                                            @if(request('link_address') === 'yes')
+                                                <td><a target="_blank" href="https://bscscan.com/address/{{ $winner->wallet_address }}">{{ $winner->wallet_address }}</a></td>
+                                            @else
+                                                <td>{{ $winner->wallet_address }}</td>
+                                            @endif
                                             <td>{{ intval($winner->won_amount) }} WQT</td>
                                         </tr>
                                     @endforeach
@@ -143,7 +151,11 @@
                                         @foreach($winners['top_referrers'] as $winner)
                                             <tr>
                                                 {{--<td>{{ $winner->round_id }}</td>--}}
-                                                <td>{{ $winner->wallet_address }}</td>
+                                                @if(request('link_address') === 'yes')
+                                                    <td><a target="_blank" href="https://bscscan.com/address/{{ $winner->wallet_address }}">{{ $winner->wallet_address }}</a></td>
+                                                @else
+                                                    <td>{{ $winner->wallet_address }}</td>
+                                                @endif
                                                 {{--<td>{{ $winners['referrer_stats'][$winner->user_id] ?? '' }}</td>--}}
                                                 <td>{{ intval($winner->won_amount) }} WQT</td>
                                             </tr>
