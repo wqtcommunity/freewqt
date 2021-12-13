@@ -60,9 +60,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(($page_title ?? '') === 'tasks' || ($page_title ?? '') === 'task') active @endif" href="{{ route('dashboard.tasks') }}">
-                            <span data-feather="briefcase"></span>
-                            Tasks
+                        <a class="nav-link @if(($page_title ?? '') === 'results') active @endif" href="{{ route('dashboard.results') }}">
+                            <span data-feather="bar-chart-2"></span>
+                            Results
                         </a>
                     </li>
                     <li class="nav-item">
@@ -75,12 +75,6 @@
                         <a class="nav-link @if(($page_title ?? '') === 'current_airdrop') active @endif" href="{{ route('dashboard.current') }}">
                             <span data-feather="watch"></span>
                             Current AirDrop
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(($page_title ?? '') === 'results') active @endif" href="{{ route('dashboard.results') }}">
-                            <span data-feather="bar-chart-2"></span>
-                            Results
                         </a>
                     </li>
                     <li class="nav-item">

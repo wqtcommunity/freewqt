@@ -7,10 +7,6 @@
     @else
         @if($test_if_up) Hello! @endif
         <div class="alert alert-info">IMPORTANT: Rewards will be distributed directly to winning BSC addresses on <span style="color:#000;font-weight:bold;">19th December, 2021</span>.<br>If you have won in a round, <strong>please be patient</strong>.</div>
-
-        @if($remaining_hours > 0)
-            <div class="alert alert-warning">Please wait up to another <strong>{{ $remaining_hours }} hours</strong> for the results of Round #{{ $previous_round_id }} to be calculated, then check again.</div>
-        @endif
     @endif
 
     <table class="table table-responsive table-striped table-bordered">
@@ -38,7 +34,7 @@
                             <small class="d-block text-info">You won this round using Tickets you have obtained on previous rounds.</small>
                         @endif
                     @elseif($previous_round_id)
-                        @if($previous_round_id == $round_stats->round_id && $remaining_hours > 0)
+                        @if($previous_round_id == $round_stats->round_id && $remaining_hours > 26)
                             <span class="text-secondary">Please wait {{ $remaining_hours }} hours.
                         @elseif($previous_round_id <= $round_stats->round_id && $round_stats->round_id !== $last_round_id)
                             No

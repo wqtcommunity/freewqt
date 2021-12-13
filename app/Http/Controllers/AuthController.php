@@ -165,7 +165,7 @@ class AuthController extends Controller
 
         if (Auth::attempt(['wallet_address' => $request->wallet_address, 'password' => $request->password], $remember_me)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard.tasks');
+            return redirect()->route('dashboard.index');
         }
 
         flash('Invalid credentials!')->error();

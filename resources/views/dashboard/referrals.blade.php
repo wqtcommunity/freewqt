@@ -8,7 +8,7 @@
             <div class="card-body">
                 <h5 class="card-title">Your Referral Link</h5>
                 <div class="card-text">
-                    @if($all_done === true)
+                    @if($all_done === true || $round_id > 4)
                         Use the following link to invite people to the project and earn more chance for each round!
                         <span id="ref_link_copy" class="link-box">{{ config('app.url') }}/?referrer={{ $incremented_ref_id }}</span>
                         <button class="btn btn-sm my-1 btn-secondary" onclick="copyRef()" type="button">Copy</button>
@@ -21,7 +21,7 @@
 
         <div class="alert alert-info my-4">Please note, for top-referrer rewards, only referrals who have <strong>correctly</strong> completed their tasks will be counted.</div>
 
-        <h6 class="my-3">Important referral rules for this round (previous rounds are unaffected):</h6>
+        <h6 class="my-3">Important referral rules:</h6>
         <ul style="font-size:0.8rem;">
             <li>As we've detected some users trying to abuse our honest and fair system, from now on only if you have completed all your tasks correctly you can use your referral link (previous referrals are unaffected)</li>
             <li>To participate in Top Referrers program, only referrals that have completed all their tasks <strong>correctly</strong> will be counted (this will be applied before amount distribution).</li>

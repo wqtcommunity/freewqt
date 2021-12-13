@@ -15,7 +15,16 @@
                 <li class="nav-item px-md-3">
                     <a class="animate__animated animate__heartBeat animate__delay-1s nav-link @if($current_route === 'pages.winners') active @endif" href="{{ route('pages.winners') }}">Winners</a>
                 </li>
-                @if(date('Ymd') < 20211220)
+                @if(date('Y') < 2022)
+                    <li class="nav-item px-md-3">
+                        <a class="nav-link @if($current_route === 'pages.meme') active @endif" href="{{ route('pages.meme') }}">Meme Contest</a>
+                    </li>
+                    <li class="nav-item px-md-3">
+                        <a class="nav-link @if($current_route === 'pages.faq') active @endif" href="{{ route('pages.faq') }}">FAQ</a>
+                    </li>
+                    <li class="nav-item px-md-3">
+                        <a class="nav-link @if($current_route === 'pages.fair_draw') active @endif" href="{{ route('pages.fair_draw') }}">Fair Draw</a>
+                    </li>
                     @auth
                         <li class="nav-item px-md-3">
                             <a href="{{ route('dashboard.index') }}" class="nav-link nav-dashboard">Dashboard</a>
