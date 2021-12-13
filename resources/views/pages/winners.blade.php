@@ -50,7 +50,7 @@
         <ul class="nav nav-tabs position-relative" id="winnersTab">
             <span id="amount_date" class="text-end position-absolute">Amount Distribution: <strong>19th December, 2021</strong></span>
             <li class="nav-item" role="presentation">
-                <a class="nav-link @if($requested_round_id == 'all') active @endif" id="round1-tab" href="{{ route('pages.winners',['round' => 'all']) }}">@if($winners_count < 550) Round 1 @elseif($winners_count < 1100) Round 1 &amp; 2 @elseif($winners_count < 1600) Round 1 &amp; 2 &amp; 3  @else All Rounds' @endif Winners @if($winners_count > 550) (Combined List) @endif</a>
+                <a class="nav-link @if($requested_round_id == 'all') active @endif" id="round1-tab" href="{{ route('pages.winners',['round' => 'all']) }}">@if($winners_count < 550) Round 1 @elseif($winners_count < 1100) Round 1 &amp; 2 @elseif($winners_count < 1600) Round 1 &amp; 2 &amp; 3  @else @endif Winners @if($winners_count > 550) (Combined list of all rounds) @endif</a>
             </li>
             @if($winners_count < 550)
                 <li class="nav-item">
