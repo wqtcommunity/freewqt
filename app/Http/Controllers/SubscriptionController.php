@@ -16,7 +16,7 @@ class SubscriptionController extends Controller
             'telegram' => ['required','regex:/^[\w_@]+$/','min:5','max:50']
         ]);
 
-        $limit = 10;
+        $limit = 15;
 
         if(date('Y') > 2021){
             $limit = 3;
