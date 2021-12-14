@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Round;
+use App\Models\Subscription;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\UserRoundStats;
@@ -35,6 +36,13 @@ class AdminController extends Controller
         $round['block'] = $last_round?->block_number;
 
         return view('admin.index', compact('total_users', 'round'));
+    }
+
+    public function subscribers()
+    {
+        $subscribers = Subscription::orderBy('id', 'DESC')->paginate(50);
+
+        return view('admin.subscribers', compact('subscribers'));
     }
 
     public function users()

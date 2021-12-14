@@ -55,6 +55,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(($page_title ?? '') === 'subscribers') active @endif" href="{{ route('admin.dashboard.subscribers') }}">
+                            <span data-feather="at-sign"></span>
+                            Subscribers
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(($page_title ?? '') === 'pending_tasks') active @endif" href="{{ route('admin.dashboard.pending_tasks') }}">
                             <span data-feather="briefcase"></span>
                             Pending Tasks

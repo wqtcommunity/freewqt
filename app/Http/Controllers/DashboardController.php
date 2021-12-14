@@ -9,10 +9,11 @@ use App\Models\UserRoundTicket;
 use App\Models\UserTask;
 use App\Http\Traits\TicketTrait;
 use App\Http\Traits\RoundTrait;
+use App\Http\Traits\SubscribeTrait;
 
 class DashboardController extends Controller
 {
-    use TicketTrait, RoundTrait;
+    use TicketTrait, RoundTrait, SubscribeTrait;
 
     public function index()
     {
@@ -27,7 +28,9 @@ class DashboardController extends Controller
 
         $real_referrals = $this->check_if_real_referrals(false, $user_id);
 
-        return view('dashboard.index', compact('last_round','user_stats','incremented_ref_id','all_done','real_referrals'));
+        $subscribed = $this->already_subscribed();
+
+        return view('dashboard.index', compact('last_round','user_stats','incremented_ref_id','all_done','real_referrals','subscribed'));
     }
 
     public function tasks()

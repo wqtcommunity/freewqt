@@ -1,6 +1,11 @@
 @extends('layouts.dashboard', ['page_title' => 'dashboard'])
 
 @section('content')
+
+    @if($subscribed !== true)
+        @include('subscription_form', ['auto_modal' => true])
+    @endif
+
     <div class="row">
         <div class="col-md-6">
             <div class="card bg-one">

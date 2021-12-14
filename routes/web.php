@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminRoundsController;
 use App\Http\Controllers\AdminTasksController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,9 @@ Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
 Route::middleware(['throttle:auth_requests'])->post('/signup', [AuthController::class, 'signup_store'])->name('signup.store');
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Subscribe
+Route::middleware(['throttle:subscribe'])->post('/subscribe', [SubscriptionController::class, 'do_subscribe'])->name('subscribe');
 
 // Pages (outside dashboard)
 Route::name('pages.')->group(function () {
@@ -105,6 +109,8 @@ Route::name('admin.dashboard.')->prefix("/admin/{$admin_prefix}/dashboard")->mid
     // Change Password
     Route::get('/change_password', [AdminController::class, 'change_password'])->name('change_password');
     Route::post('/change_password', [AdminController::class, 'change_password_store'])->name('change_password.store');
+    // Subscribers
+    Route::get('/subscribers', [AdminController::class, 'subscribers'])->name('subscribers');
 });
 
 

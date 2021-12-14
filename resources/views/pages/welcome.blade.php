@@ -10,6 +10,13 @@
         @endif
     </section>
 
+    @include('subscription_form', ['auto_modal' => false])
+    <div class="text-center">
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Get notified for Future Events
+        </button>
+    </div>
+
     <section id="countdown" class="animate__animated animate__jackInTheBox py-2 mb-5">
         @if($current_round['id'] < 5)
             <img id="join_now" class="animate__animated animate__tada animate__delay-2s" src="{{ asset('assets/img/join_now.svg') }}">
