@@ -1,6 +1,7 @@
 @extends('layouts.admin_dashboard', ['page_title' => 'subscribers'])
 
 @section('content')
+    <a href="?json=true" class="btn btn-primary btn-sm float-end">Export JSON</a>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>

@@ -40,6 +40,10 @@ class AdminController extends Controller
 
     public function subscribers()
     {
+        if(request('json') === 'true'){
+            return Subscription::select(['email','telegram'])->get();
+        }
+
         $subscribers = Subscription::orderBy('id', 'DESC')->paginate(50);
 
         return view('admin.subscribers', compact('subscribers'));
