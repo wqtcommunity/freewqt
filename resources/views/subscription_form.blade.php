@@ -3,7 +3,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">This event has ended, but would you like to be notified for future events?</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">This event has ended, would you like to get notified for future events?</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -18,7 +18,7 @@
                         <input type="text" required name="telegram" class="form-control" id="telegram">
                     </div>
                     <button type="button" class="btn btn-secondary float-end" data-bs-dismiss="modal">No (Close)</button>
-                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                    <button type="submit" class="btn btn-primary">Yes (Subscribe)</button>
                 </form>
             </div>
             <div class="modal-footer">
