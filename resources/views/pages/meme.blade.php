@@ -193,6 +193,8 @@
                                     <li>All Participants can only share their meme with friends and in authorized groups.</li>
                                     <li>All Participants (for all 3 programs) can only share their meme once per day in WorkQuest's telegram group. (forwarded from telegram bot (using @like bot), sharing twitter link, or their GIFs or video clips).</li>
                                     <li>Each account (telegram & twitter) can only win once in the entire contest, but they can continue to reach the final round to win the big prize!</li>
+                                    <li>Minimum Likes / Retweets must be at least 30 to be accepted in the event.</li>
+                                    <li>Each meme has to be published at least 3 days before end of the week, and has to be posted in official telegram group for at least 3 days.</li>
                                 </ul>
                             </div>
                         </div>
